@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PRECISION Scientific</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700;900&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error-container": "#ffd2c8",
+              "on-tertiary": "#593400",
+              "secondary-fixed-dim": "#d6d4d6",
+              "outline": "#767577",
+              "surface-variant": "#252528",
+              "tertiary-container": "#fd9d06",
+              "on-secondary-fixed-variant": "#5c5b5d",
+              "inverse-on-surface": "#555557",
+              "tertiary-fixed-dim": "#eb9100",
+              "error-container": "#b92902",
+              "on-primary-fixed": "#004818",
+              "secondary": "#e4e2e4",
+              "primary-container": "#1db94d",
+              "secondary-dim": "#d6d4d6",
+              "on-background": "#fefbfe",
+              "tertiary": "#ffb153",
+              "primary": "#6ffb85",
+              "inverse-primary": "#006e28",
+              "surface-bright": "#2c2c2f",
+              "surface-container-high": "#1f1f22",
+              "on-primary-fixed-variant": "#006826",
+              "on-tertiary-fixed": "#2b1600",
+              "primary-fixed-dim": "#60ec79",
+              "surface-dim": "#0e0e10",
+              "background": "#0e0e10",
+              "tertiary-fixed": "#fd9d06",
+              "on-tertiary-fixed-variant": "#573300",
+              "on-secondary-fixed": "#3f3f41",
+              "surface": "#0e0e10",
+              "surface-container-highest": "#252528",
+              "on-tertiary-container": "#4b2b00",
+              "inverse-surface": "#fcf8fb",
+              "outline-variant": "#48474a",
+              "on-surface": "#fefbfe",
+              "surface-container-low": "#131315",
+              "surface-container-lowest": "#000000",
+              "error-dim": "#d53d18",
+              "surface-container": "#19191c",
+              "secondary-container": "#474648",
+              "on-secondary-container": "#d2d0d2",
+              "on-primary-container": "#002a0a",
+              "on-error": "#450900",
+              "primary-fixed": "#6ffb85",
+              "error": "#ff7351",
+              "on-surface-variant": "#acaaad",
+              "tertiary-dim": "#eb9100",
+              "on-secondary": "#525153",
+              "primary-dim": "#60ec79",
+              "on-primary": "#005d21",
+              "secondary-fixed": "#e4e2e4",
+              "surface-tint": "#6ffb85"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0e0e10;
+            color: #fefbfe;
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden;
+        }
+        .editorial-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            height: calc(100vh - 64px - 84px);
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-[#0e0e10] flex items-center justify-between px-6 py-4 w-full z-50">
+<div class="flex items-center gap-4">
+<button class="text-[#6ffb85] hover:bg-[#1f1f22] transition-colors p-2 rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-['Space_Grotesk'] font-bold tracking-tighter uppercase text-xl font-black tracking-widest text-[#6ffb85]">PRECISION</h1>
+</div>
+<!-- Top Settings/Conversion Widget -->
+<div class="hidden md:flex items-center gap-2 bg-[#131315] px-4 py-2 rounded-full border border-outline-variant/10">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Unit</span>
+<div class="flex items-center gap-3 px-2">
+<span class="text-sm font-medium text-on-surface">DEG</span>
+<div class="w-px h-3 bg-outline-variant/30"></div>
+<span class="text-sm font-medium text-on-surface-variant">RAD</span>
+</div>
+<button class="flex items-center gap-1 text-[#6ffb85] bg-[#1f1f22] px-3 py-1 rounded-full text-xs hover:bg-[#252528] transition-colors">
+<span class="material-symbols-outlined text-sm">sync_alt</span>
+<span class="font-bold">CONVERT</span>
+</button>
+</div>
+<button class="text-[#6ffb85] hover:bg-[#1f1f22] transition-colors p-2 rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<!-- Main Content Area: Landscape Scientific Layout -->
+<main class="flex-1 flex flex-col md:flex-row p-6 gap-6 overflow-hidden">
+<!-- Left Column: High-End Display & History -->
+<div class="flex-1 flex flex-col justify-between">
+<!-- Display Area -->
+<div class="flex flex-col items-end justify-end flex-1 pb-12 pr-4">
+<span class="font-['Space_Grotesk'] text-xl text-on-surface-variant font-light tracking-tight mb-2 opacity-60">
+                    sin(45) × √(256) + log(100)
+                </span>
+<h2 class="font-['Space_Grotesk'] text-6xl md:text-8xl font-bold tracking-tighter text-on-surface leading-none">
+                    145.24
+                </h2>
+</div>
+<!-- History Snippet (Bento Style) -->
+<div class="grid grid-cols-2 gap-4 h-32">
+<div class="bg-surface-container-low rounded-lg p-4 flex flex-col justify-between border border-outline-variant/5">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Memory</span>
+<span class="font-headline text-xl text-tertiary">1,024.00</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-4 flex flex-col justify-between border border-outline-variant/5">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Last Result</span>
+<span class="font-headline text-xl text-on-surface">42.00</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Scientific Keypad Grid -->
+<div class="flex-[1.2] flex flex-col gap-2">
+<!-- Scientific Row (Glassmorphism Effect) -->
+<div class="grid grid-cols-5 gap-2 mb-2">
+<button class="h-14 rounded-sm bg-surface-container-highest/50 backdrop-blur-xl flex items-center justify-center text-tertiary font-bold hover:bg-surface-container-highest transition-colors active:scale-95">sin</button>
+<button class="h-14 rounded-sm bg-surface-container-highest/50 backdrop-blur-xl flex items-center justify-center text-tertiary font-bold hover:bg-surface-container-highest transition-colors active:scale-95">cos</button>
+<button class="h-14 rounded-sm bg-surface-container-highest/50 backdrop-blur-xl flex items-center justify-center text-tertiary font-bold hover:bg-surface-container-highest transition-colors active:scale-95">tan</button>
+<button class="h-14 rounded-sm bg-surface-container-highest/50 backdrop-blur-xl flex items-center justify-center text-tertiary font-bold hover:bg-surface-container-highest transition-colors active:scale-95">log</button>
+<button class="h-14 rounded-sm bg-surface-container-highest/50 backdrop-blur-xl flex items-center justify-center text-tertiary font-bold hover:bg-surface-container-highest transition-colors active:scale-95">ln</button>
+</div>
+<!-- Primary Grid -->
+<div class="grid grid-cols-5 gap-2 flex-1">
+<!-- Row 1 -->
+<button class="rounded-md bg-surface-container-highest text-tertiary font-bold hover:bg-surface-bright active:scale-95 transition-all">√</button>
+<button class="rounded-md bg-surface-container-highest text-tertiary font-bold hover:bg-surface-bright active:scale-95 transition-all">π</button>
+<button class="rounded-md bg-surface-container-highest text-tertiary font-bold hover:bg-surface-bright active:scale-95 transition-all">^</button>
+<button class="rounded-md bg-surface-container-high text-error font-bold hover:bg-surface-bright active:scale-95 transition-all">C</button>
+<button class="rounded-md bg-surface-container-high text-primary font-bold hover:bg-surface-bright active:scale-95 transition-all">
+<span class="material-symbols-outlined">backspace</span>
+</button>
+<!-- Row 2 -->
+<button class="rounded-md bg-surface-container-highest text-tertiary font-bold hover:bg-surface-bright active:scale-95 transition-all">x!</button>
+<button class="rounded-md bg-surface-container-high text-on-surface text-xl font-bold hover:bg-surface-bright active:scale-95 transition-all">7</button>
+<button class="rounded-md bg-surface-container-high text-on-surface text-xl font-bold hover:bg-surface-bright active:scale-95 transition-all">8</button>
+<button class="rounded-md bg-surface-container-high text-on-surface text-xl font-bold hover:bg-surface-bright active:scale-95 transition-all">9</button>
+<button class="rounded-md bg-surface-container-high text-primary font-bold hover:bg-surface-bright active:scale-95 transition-all text-2xl">÷</button>
+<!-- Row 3 -->
+<button class="rounded-md bg-surface-container-highest text-tertiary font-bold hover:bg-surface-bright active:scale-95 transition-all">e</button>
+<button class="rounded-md bg-surface-container-high text-on-surface text-xl font-bold hover:bg-surface-bright active:scale-95 transition-all">4</button>
+<button class="rounded-md bg-surface-container-high text-on-surface text-xl font-bold hover:bg-surface-bright active:scale-95 transition-all">5</button>
+<button class="rounded-md bg-surface-container-high text-on-surface text-xl font-bold hover:bg-surface-bright active:scale-95 transition-all">6</button>
+<button class="rounded-md bg-surface-container-high text-primary font-bold hover:bg-surface-bright active:scale-95 transition-all text-2xl">×</button>
+<!-- Row 4 -->
+<button class="rounded-md bg-surface-container-highest text-tertiary font-bold hover:bg-surface-bright active:scale-95 transition-all">Inv</button>
+<button class="rounded-md bg-surface-container-high text-on-surface text-xl font-bold hover:bg-surface-bright active:scale-95 transition-all">1</button>
+<button class="rounded-md bg-surface-container-high text-on-surface text-xl font-bold hover:bg-surface-bright active:scale-95 transition-all">2</button>
+<button class="rounded-md bg-surface-container-high text-on-surface text-xl font-bold hover:bg-surface-bright active:scale-95 transition-all">3</button>
+<button class="rounded-md bg-surface-container-high text-primary font-bold hover:bg-surface-bright active:scale-95 transition-all text-2xl">−</button>
+<!-- Row 5 (Bottom) -->
+<button class="rounded-md bg-surface-container-highest text-tertiary font-bold hover:bg-surface-bright active:scale-95 transition-all">( )</button>
+<button class="rounded-md bg-surface-container-high text-on-surface text-xl font-bold hover:bg-surface-bright active:scale-95 transition-all">0</button>
+<button class="rounded-md bg-surface-container-high text-on-surface text-xl font-bold hover:bg-surface-bright active:scale-95 transition-all">.</button>
+<button class="col-span-2 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary-container text-3xl font-black hover:opacity-90 active:scale-95 transition-all">
+                    =
+                </button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-8 pb-6 pt-4 bg-[#0e0e10] shadow-[0_-8px_30px_rgb(0,0,0,0.12)] rounded-t-[2.5rem]">
+<button class="flex flex-col items-center justify-center text-[#e4e2e4] opacity-50 hover:opacity-100 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">calculate</span>
+<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest mt-1">Math</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-[#1f1f22] text-[#6ffb85] rounded-full px-5 py-2 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">straighten</span>
+<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest mt-1">Units</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#e4e2e4] opacity-50 hover:opacity-100 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest mt-1">Kitchen</span>
+</button>
+</nav>
+<!-- Sidebar/Drawer Placeholder (Hidden by default, triggered by menu) -->
+<aside class="fixed inset-y-0 left-0 z-[60] flex flex-col p-6 bg-[#0e0e10] h-full w-[280px] rounded-r-3xl shadow-2xl shadow-black -translate-x-full transition-transform duration-300">
+<div class="mb-8">
+<h3 class="text-[#6ffb85] font-bold font-['Space_Grotesk'] text-xs tracking-widest uppercase">EQUATION LOG</h3>
+</div>
+<div class="flex flex-col gap-2">
+<button class="flex items-center gap-4 p-4 rounded-xl bg-[#1f1f22] text-[#6ffb85] font-bold font-['Space_Grotesk'] font-light">
+<span class="material-symbols-outlined">history</span>
+<span>History</span>
+</button>
+<button class="flex items-center gap-4 p-4 rounded-xl text-[#e4e2e4] hover:bg-[#131315] font-['Space_Grotesk'] font-light">
+<span class="material-symbols-outlined">memory</span>
+<span>Memory</span>
+</button>
+<button class="flex items-center gap-4 p-4 rounded-xl text-[#e4e2e4] hover:bg-[#131315] font-['Space_Grotesk'] font-light">
+<span class="material-symbols-outlined">function</span>
+<span>Constants</span>
+</button>
+<button class="flex items-center gap-4 p-4 rounded-xl text-[#e4e2e4] hover:bg-[#131315] font-['Space_Grotesk'] font-light">
+<span class="material-symbols-outlined">tune</span>
+<span>Advanced Settings</span>
+</button>
+</div>
+</aside>
+</body></html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PRECISION | Unit Conversions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error-container": "#ffd2c8",
+              "on-tertiary": "#593400",
+              "secondary-fixed-dim": "#d6d4d6",
+              "outline": "#767577",
+              "surface-variant": "#252528",
+              "tertiary-container": "#fd9d06",
+              "on-secondary-fixed-variant": "#5c5b5d",
+              "inverse-on-surface": "#555557",
+              "tertiary-fixed-dim": "#eb9100",
+              "error-container": "#b92902",
+              "on-primary-fixed": "#004818",
+              "secondary": "#e4e2e4",
+              "primary-container": "#1db94d",
+              "secondary-dim": "#d6d4d6",
+              "on-background": "#fefbfe",
+              "tertiary": "#ffb153",
+              "primary": "#6ffb85",
+              "inverse-primary": "#006e28",
+              "surface-bright": "#2c2c2f",
+              "surface-container-high": "#1f1f22",
+              "on-primary-fixed-variant": "#006826",
+              "on-tertiary-fixed": "#2b1600",
+              "primary-fixed-dim": "#60ec79",
+              "surface-dim": "#0e0e10",
+              "background": "#0e0e10",
+              "tertiary-fixed": "#fd9d06",
+              "on-tertiary-fixed-variant": "#573300",
+              "on-secondary-fixed": "#3f3f41",
+              "surface": "#0e0e10",
+              "surface-container-highest": "#252528",
+              "on-tertiary-container": "#4b2b00",
+              "inverse-surface": "#fcf8fb",
+              "outline-variant": "#48474a",
+              "on-surface": "#fefbfe",
+              "surface-container-low": "#131315",
+              "surface-container-lowest": "#000000",
+              "error-dim": "#d53d18",
+              "surface-container": "#19191c",
+              "secondary-container": "#474648",
+              "on-secondary-container": "#d2d0d2",
+              "on-primary-container": "#002a0a",
+              "on-error": "#450900",
+              "primary-fixed": "#6ffb85",
+              "error": "#ff7351",
+              "on-surface-variant": "#acaaad",
+              "tertiary-dim": "#eb9100",
+              "on-secondary": "#525153",
+              "primary-dim": "#60ec79",
+              "on-primary": "#005d21",
+              "secondary-fixed": "#e4e2e4",
+              "surface-tint": "#6ffb85"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-[#0e0e10] flex items-center justify-between px-6 py-4">
+<div class="flex items-center gap-4">
+<button class="hover:bg-[#1f1f22] transition-colors p-2 rounded-full active:scale-95 duration-100 text-[#6ffb85]">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="text-xl font-black tracking-widest text-[#6ffb85] font-['Space_Grotesk'] uppercase">PRECISION</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-[#1f1f22] transition-colors p-2 rounded-full active:scale-95 duration-100 text-[#6ffb85]">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- Navigation Drawer (Settings Widget Active Overlay) -->
+<aside class="fixed inset-y-0 left-0 z-[60] flex flex-col p-6 bg-[#0e0e10] h-full w-[280px] rounded-r-3xl shadow-2xl shadow-black backdrop-blur-xl opacity-90 border-r border-outline-variant/10">
+<div class="flex items-center justify-between mb-8">
+<span class="text-[#6ffb85] font-bold font-['Space_Grotesk'] tracking-widest uppercase">EQUATION LOG</span>
+<button class="text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<nav class="space-y-2">
+<div class="flex items-center gap-4 p-4 rounded-xl text-[#e4e2e4] hover:bg-[#131315] transition-colors font-['Space_Grotesk'] font-light">
+<span class="material-symbols-outlined">history</span>
+<span>History</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-xl text-[#e4e2e4] hover:bg-[#131315] transition-colors font-['Space_Grotesk'] font-light">
+<span class="material-symbols-outlined">memory</span>
+<span>Memory</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-xl text-[#e4e2e4] hover:bg-[#131315] transition-colors font-['Space_Grotesk'] font-light">
+<span class="material-symbols-outlined">function</span>
+<span>Constants</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-xl bg-[#1f1f22] text-[#6ffb85] font-bold font-['Space_Grotesk']">
+<span class="material-symbols-outlined">tune</span>
+<span>Advanced Settings</span>
+</div>
+</nav>
+<div class="mt-auto p-4 bg-surface-container-low rounded-2xl">
+<p class="text-[10px] uppercase tracking-tighter text-on-surface-variant mb-2">Current Mode</p>
+<div class="flex items-center justify-between">
+<span class="text-sm font-bold">Scientific Engine v4.2</span>
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+</div>
+</div>
+</aside>
+<main class="pt-24 pb-32 px-6 max-w-4xl mx-auto min-h-screen">
+<!-- Editorial Display Area -->
+<section class="mb-12">
+<div class="flex flex-col items-end text-right">
+<span class="font-headline text-on-surface-variant headline-md tracking-tight mb-2 opacity-60">1,240.50 Meters to Feet</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline display-lg text-on-surface font-bold tracking-tighter">4,069.88</span>
+<span class="font-headline text-primary text-2xl font-black italic">ft</span>
+</div>
+</div>
+</section>
+<!-- Bento Grid: Unit Categories -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8">
+<button class="bg-surface-container-low p-6 rounded-md flex flex-col items-center justify-center gap-3 border border-outline-variant/5 hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined text-primary scale-125">straighten</span>
+<span class="font-label text-xs uppercase tracking-widest font-bold">Length</span>
+</button>
+<button class="bg-surface-container-high p-6 rounded-md flex flex-col items-center justify-center gap-3 border border-primary/20 shadow-[0_0_20px_rgba(111,251,133,0.1)] transition-all">
+<span class="material-symbols-outlined text-primary scale-125" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+<span class="font-label text-xs uppercase tracking-widest font-bold text-primary">Weight</span>
+</button>
+<button class="bg-surface-container-low p-6 rounded-md flex flex-col items-center justify-center gap-3 border border-outline-variant/5 hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined text-tertiary scale-125">thermostat</span>
+<span class="font-label text-xs uppercase tracking-widest font-bold">Temperature</span>
+</button>
+<button class="bg-surface-container-low p-6 rounded-md flex flex-col items-center justify-center gap-3 border border-outline-variant/5 hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined text-secondary scale-125">square_foot</span>
+<span class="font-label text-xs uppercase tracking-widest font-bold">Area</span>
+</button>
+</section>
+<!-- Conversion Interface -->
+<div class="bg-surface-container rounded-lg p-8 space-y-8 relative overflow-hidden">
+<!-- Background Texture Decal -->
+<div class="absolute -right-12 -bottom-12 opacity-[0.03] pointer-events-none">
+<span class="material-symbols-outlined text-[240px]">scale</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+<!-- Input Section -->
+<div class="space-y-4">
+<label class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Input Value</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border-none rounded-md px-6 py-5 text-2xl font-headline font-bold focus:ring-2 focus:ring-primary/30 transition-all text-on-surface" type="number" value="1240.50"/>
+<div class="absolute inset-y-0 right-4 flex items-center">
+<span class="text-on-surface-variant font-label text-xs">m</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex-1 bg-surface-container-high rounded-md p-4 flex justify-between items-center cursor-pointer hover:bg-surface-bright transition-colors">
+<div class="flex flex-col">
+<span class="text-[9px] uppercase tracking-tighter text-on-surface-variant font-bold">From</span>
+<span class="text-sm font-bold">Meters</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">unfold_more</span>
+</div>
+</div>
+</div>
+<!-- Spacer / Swap Button -->
+<div class="hidden md:flex flex-col items-center justify-center">
+<button class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary-container transition-all">
+<span class="material-symbols-outlined">swap_horiz</span>
+</button>
+</div>
+<!-- Target Section -->
+<div class="space-y-4">
+<label class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Target Unit</label>
+<div class="bg-surface-container-high rounded-md p-4 flex justify-between items-center cursor-pointer hover:bg-surface-bright transition-colors border border-primary/10">
+<div class="flex flex-col">
+<span class="text-[9px] uppercase tracking-tighter text-on-surface-variant font-bold">To</span>
+<span class="text-sm font-bold">Feet (International)</span>
+</div>
+<span class="material-symbols-outlined text-primary">expand_more</span>
+</div>
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary-container py-5 rounded-xl font-headline font-black text-lg uppercase tracking-widest shadow-lg shadow-primary/10 active:scale-95 transition-transform flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">calculate</span>
+                        Convert
+                    </button>
+</div>
+</div>
+</div>
+<!-- Recent Conversions (Editorial List) -->
+<div class="mt-12 space-y-6">
+<h3 class="font-headline font-bold text-sm tracking-widest uppercase opacity-40">Recent Activity</h3>
+<div class="space-y-2">
+<div class="group flex items-center justify-between p-4 bg-surface-container-low/30 rounded-md hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-on-surface-variant">history</span>
+</div>
+<div>
+<p class="text-sm font-medium">85 kg → 187.39 lbs</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter font-bold">Weight • 2 mins ago</p>
+</div>
+</div>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-primary text-sm cursor-pointer">refresh</span>
+</div>
+<div class="group flex items-center justify-between p-4 bg-transparent rounded-md hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-on-surface-variant">history</span>
+</div>
+<div>
+<p class="text-sm font-medium">24°C → 75.2°F</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter font-bold">Temperature • 1 hour ago</p>
+</div>
+</div>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-primary text-sm cursor-pointer">refresh</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-8 pb-6 pt-4 bg-[#0e0e10] rounded-t-[2.5rem] shadow-[0_-8px_30px_rgb(0,0,0,0.12)]">
+<a class="flex flex-col items-center justify-center text-[#e4e2e4] opacity-50 hover:opacity-100 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">calculate</span>
+<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest">Math</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#1f1f22] text-[#6ffb85] rounded-full px-5 py-2 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">straighten</span>
+<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest">Units</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#e4e2e4] opacity-50 hover:opacity-100 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">restaurant</span>
+<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest">Kitchen</span>
+</a>
+</nav>
+<!-- Floating Action Button (Supressed as per context - Details/Task Focused View) -->
+</body></html>

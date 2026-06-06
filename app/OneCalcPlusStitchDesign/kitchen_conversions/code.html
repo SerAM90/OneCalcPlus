@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700;900&amp;family=Manrope:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-error-container": "#ffd2c8",
+                        "on-tertiary": "#593400",
+                        "secondary-fixed-dim": "#d6d4d6",
+                        "outline": "#767577",
+                        "surface-variant": "#252528",
+                        "tertiary-container": "#fd9d06",
+                        "on-secondary-fixed-variant": "#5c5b5d",
+                        "inverse-on-surface": "#555557",
+                        "tertiary-fixed-dim": "#eb9100",
+                        "error-container": "#b92902",
+                        "on-primary-fixed": "#004818",
+                        "secondary": "#e4e2e4",
+                        "primary-container": "#1db94d",
+                        "secondary-dim": "#d6d4d6",
+                        "on-background": "#fefbfe",
+                        "tertiary": "#ffb153",
+                        "primary": "#6ffb85",
+                        "inverse-primary": "#006e28",
+                        "surface-bright": "#2c2c2f",
+                        "surface-container-high": "#1f1f22",
+                        "on-primary-fixed-variant": "#006826",
+                        "on-tertiary-fixed": "#2b1600",
+                        "primary-fixed-dim": "#60ec79",
+                        "surface-dim": "#0e0e10",
+                        "background": "#0e0e10",
+                        "tertiary-fixed": "#fd9d06",
+                        "on-tertiary-fixed-variant": "#573300",
+                        "on-secondary-fixed": "#3f3f41",
+                        "surface": "#0e0e10",
+                        "surface-container-highest": "#252528",
+                        "on-tertiary-container": "#4b2b00",
+                        "inverse-surface": "#fcf8fb",
+                        "outline-variant": "#48474a",
+                        "on-surface": "#fefbfe",
+                        "surface-container-low": "#131315",
+                        "surface-container-lowest": "#000000",
+                        "error-dim": "#d53d18",
+                        "surface-container": "#19191c",
+                        "secondary-container": "#474648",
+                        "on-secondary-container": "#d2d0d2",
+                        "on-primary-container": "#002a0a",
+                        "on-error": "#450900",
+                        "primary-fixed": "#6ffb85",
+                        "error": "#ff7351",
+                        "on-surface-variant": "#acaaad",
+                        "tertiary-dim": "#eb9100",
+                        "on-secondary": "#525153",
+                        "primary-dim": "#60ec79",
+                        "on-primary": "#005d21",
+                        "secondary-fixed": "#e4e2e4",
+                        "surface-tint": "#6ffb85"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-[#0e0e10] flex items-center justify-between px-6 py-4">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#1f1f22] transition-colors active:scale-95 duration-100 rounded-full">
+<span class="material-symbols-outlined text-[#6ffb85]">menu</span>
+</button>
+<h1 class="font-['Space_Grotesk'] font-black tracking-widest text-[#6ffb85] text-xl uppercase">PRECISION</h1>
+</div>
+<button class="p-2 hover:bg-[#1f1f22] transition-colors active:scale-95 duration-100 rounded-full">
+<span class="material-symbols-outlined text-[#6ffb85]">settings</span>
+</button>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-lg mx-auto min-h-screen">
+<!-- Hero Display Section -->
+<section class="mb-12">
+<div class="flex flex-col items-end text-right">
+<span class="font-label text-label-sm uppercase tracking-[0.2em] text-on-surface-variant mb-2">Current Equation</span>
+<div class="font-headline text-headline-md text-on-surface-variant tracking-tight">
+                    2.5 Cups → ml
+                </div>
+<div class="font-headline text-[4rem] md:text-[5rem] font-bold leading-none tracking-tighter text-on-surface mt-2">
+                    591.47
+                </div>
+<span class="font-label text-label-sm uppercase tracking-widest text-primary mt-1">Milliliters</span>
+</div>
+</section>
+<!-- Kitchen Logic Grid (Asymmetric) -->
+<div class="grid grid-cols-4 gap-2">
+<!-- Mode Selectors -->
+<button class="col-span-2 aspect-square bg-surface-container-high rounded-lg p-6 flex flex-col justify-between items-start hover:bg-surface-bright transition-colors active:scale-95 group">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="restaurant">restaurant</span>
+<div class="text-left">
+<p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Volume</p>
+<p class="font-headline text-lg font-bold">Cups/ml</p>
+</div>
+</button>
+<button class="col-span-2 aspect-square bg-surface-container-low rounded-lg p-6 flex flex-col justify-between items-start hover:bg-surface-bright transition-colors active:scale-95 group">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl" data-icon="scale">scale</span>
+<div class="text-left">
+<p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant opacity-50">Weight</p>
+<p class="font-headline text-lg font-bold text-on-surface-variant">Grams/oz</p>
+</div>
+</button>
+<!-- Number Pad Area -->
+<div class="col-span-3 grid grid-cols-3 gap-2 mt-2">
+<!-- Row 1 -->
+<button class="aspect-square bg-surface-container-high rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all">7</button>
+<button class="aspect-square bg-surface-container-high rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all">8</button>
+<button class="aspect-square bg-surface-container-high rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all">9</button>
+<!-- Row 2 -->
+<button class="aspect-square bg-surface-container-high rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all">4</button>
+<button class="aspect-square bg-surface-container-high rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all">5</button>
+<button class="aspect-square bg-surface-container-high rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all">6</button>
+<!-- Row 3 -->
+<button class="aspect-square bg-surface-container-high rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all">1</button>
+<button class="aspect-square bg-surface-container-high rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all">2</button>
+<button class="aspect-square bg-surface-container-high rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all">3</button>
+<!-- Row 4 -->
+<button class="aspect-square bg-surface-container-high rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all">.</button>
+<button class="aspect-square bg-surface-container-high rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all">0</button>
+<button class="aspect-square bg-surface-container-low rounded-md flex items-center justify-center font-headline text-2xl hover:bg-surface-bright active:scale-90 transition-all text-error">
+<span class="material-symbols-outlined" data-icon="backspace">backspace</span>
+</button>
+</div>
+<!-- Action Column -->
+<div class="col-span-1 flex flex-col gap-2 mt-2">
+<button class="flex-1 bg-surface-container-low rounded-md flex items-center justify-center hover:bg-surface-bright active:scale-90 transition-all">
+<span class="material-symbols-outlined text-tertiary" data-icon="device_thermostat">device_thermostat</span>
+</button>
+<button class="flex-1 bg-surface-container-low rounded-md flex items-center justify-center hover:bg-surface-bright active:scale-90 transition-all">
+<span class="material-symbols-outlined text-secondary" data-icon="swap_horiz">swap_horiz</span>
+</button>
+<button class="flex-[2] bg-gradient-to-br from-primary to-primary-container rounded-xl flex items-center justify-center shadow-lg shadow-primary/10 active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-on-primary-container text-4xl" data-icon="check" style="font-variation-settings: 'FILL' 1;">check</span>
+</button>
+</div>
+</div>
+<!-- Settings Widget (Active Overlay) -->
+<div class="mt-8 bg-surface-container-highest/80 backdrop-blur-xl rounded-lg p-6 border border-white/5 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[60px] rounded-full -mr-16 -mt-16"></div>
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline font-bold text-lg uppercase tracking-wider text-primary">Conversion Logic</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="tune">tune</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-surface-container rounded-md hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary" data-icon="soup_kitchen">soup_kitchen</span>
+<div>
+<p class="text-sm font-bold">Standard Volume</p>
+<p class="text-[10px] uppercase text-on-surface-variant tracking-tighter">Cups ↔ Milliliters</p>
+</div>
+</div>
+<div class="w-10 h-5 bg-primary/20 rounded-full relative">
+<div class="absolute right-0.5 top-0.5 w-4 h-4 bg-primary rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container rounded-md hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="flex items-center gap-3 opacity-50">
+<span class="material-symbols-outlined" data-icon="monitor_weight">monitor_weight</span>
+<div>
+<p class="text-sm font-bold">Mass &amp; Weight</p>
+<p class="text-[10px] uppercase tracking-tighter">Grams ↔ Ounces</p>
+</div>
+</div>
+<div class="w-10 h-5 bg-surface-variant rounded-full relative">
+<div class="absolute left-0.5 top-0.5 w-4 h-4 bg-on-surface-variant rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container rounded-md hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="flex items-center gap-3 opacity-50">
+<span class="material-symbols-outlined" data-icon="thermostat">thermostat</span>
+<div>
+<p class="text-sm font-bold">Temperature</p>
+<p class="text-[10px] uppercase tracking-tighter">Celsius ↔ Fahrenheit</p>
+</div>
+</div>
+<div class="w-10 h-5 bg-surface-variant rounded-full relative">
+<div class="absolute left-0.5 top-0.5 w-4 h-4 bg-on-surface-variant rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- NavigationDrawer (Hidden by default, structure represented for completeness) -->
+<div class="fixed inset-y-0 left-0 z-[60] flex flex-col p-6 bg-[#0e0e10] h-full w-[280px] rounded-r-3xl shadow-2xl shadow-black -translate-x-full transition-transform">
+<div class="flex items-center gap-2 mb-8">
+<span class="text-[#6ffb85] font-bold font-headline">EQUATION LOG</span>
+</div>
+<div class="space-y-2">
+<div class="flex items-center gap-4 px-4 py-3 rounded-xl bg-[#1f1f22] text-[#6ffb85] font-bold font-headline">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span>History</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 rounded-xl text-[#e4e2e4] hover:bg-[#131315] font-headline font-light">
+<span class="material-symbols-outlined" data-icon="memory">memory</span>
+<span>Memory</span>
+</div>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-8 pb-6 pt-4 bg-[#0e0e10] rounded-t-[2.5rem] shadow-[0_-8px_30px_rgb(0,0,0,0.12)]">
+<a class="flex flex-col items-center justify-center text-[#e4e2e4] opacity-50 hover:opacity-100 active:scale-90 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calculate">calculate</span>
+<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest mt-1">Math</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#e4e2e4] opacity-50 hover:opacity-100 active:scale-90 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="straighten">straighten</span>
+<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest mt-1">Units</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#1f1f22] text-[#6ffb85] rounded-full px-5 py-2 active:scale-90 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest mt-1">Kitchen</span>
+</a>
+</nav>
+</body></html>
