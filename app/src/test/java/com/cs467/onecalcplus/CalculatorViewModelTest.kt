@@ -63,6 +63,22 @@ class CalculatorViewModelTest {
     }
 
     @Test
+    fun testDivisionByZero() {
+        viewModel.onNumberClick("5")
+        viewModel.onOperationClick("÷")
+        viewModel.onNumberClick("0")
+        viewModel.calculate()
+        assertEquals("undefined", viewModel.displayState.value)
+    }
+
+    @Test
+    fun testScientificDivisionByZero() {
+        viewModel.onNumberClick("0")
+        viewModel.onScientificOperation("1/x")
+        assertEquals("undefined", viewModel.displayState.value)
+    }
+
+    @Test
     fun testClear() {
         viewModel.onNumberClick("1")
         viewModel.onNumberClick("2")

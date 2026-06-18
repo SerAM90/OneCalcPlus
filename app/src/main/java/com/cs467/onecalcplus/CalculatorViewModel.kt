@@ -28,6 +28,9 @@ class CalculatorViewModel : ViewModel() {
     private val _mode = mutableStateOf(CalculatorMode.CALCULATOR)
     val mode: State<CalculatorMode> = _mode
 
+    private val _isScientificExpanded = mutableStateOf(false)
+    val isScientificExpanded: State<Boolean> = _isScientificExpanded
+
     // State for interactive conversions
     private val _conversionInput = mutableStateOf("")
     val conversionInput: State<String> = _conversionInput
@@ -43,7 +46,7 @@ class CalculatorViewModel : ViewModel() {
         val currentMode = _mode.value
         if (currentMode == CalculatorMode.CALCULATOR) {
             val currentDisplay = _displayState.value
-            if (isNewInput || currentDisplay == "0") {
+            if (isNewInput || currentDisplay == "0" || currentDisplay == "undefined") {
                 _displayState.value = number
                 isNewInput = false
             } else {
@@ -111,16 +114,21 @@ class CalculatorViewModel : ViewModel() {
         val operand1 = lastOperand ?: return
         val operation = pendingOperation ?: return
 
+        if (operation == "÷" && currentValue.compareTo(BigDecimal.ZERO) == 0) {
+            _displayState.value = "undefined"
+            _equationState.value = ""
+            lastOperand = null
+            pendingOperation = null
+            isNewInput = true
+            return
+        }
+
         val result: BigDecimal = try {
             when (operation) {
                 "+" -> operand1.add(currentValue)
                 "-" -> operand1.subtract(currentValue)
                 "×" -> operand1.multiply(currentValue)
-                "÷" -> if (currentValue != BigDecimal.ZERO) {
-                    operand1.divide(currentValue, 10, RoundingMode.HALF_UP)
-                } else {
-                    BigDecimal.ZERO
-                }
+                "÷" -> operand1.divide(currentValue, 10, RoundingMode.HALF_UP)
                 "%" -> operand1.remainder(currentValue)
                 "^" -> try {
                     operand1.pow(currentValue.toInt())
@@ -152,7 +160,7 @@ class CalculatorViewModel : ViewModel() {
             "√" -> sqrt(currentValue)
             "π" -> PI
             "e" -> E
-            "1/x" -> 1.0 / currentValue
+            "1/x" -> if (currentValue != 0.0) 1.0 / currentValue else Double.NaN
             "x²" -> currentValue.pow(2)
             "|x|" -> abs(currentValue)
             "exp" -> exp(currentValue)
@@ -177,6 +185,10 @@ class CalculatorViewModel : ViewModel() {
         clear()
     }
 
+    fun toggleScientific() {
+        _isScientificExpanded.value = !_isScientificExpanded.value
+    }
+
     fun selectConversion(item: ConversionItem) {
         _selectedConversion.value = item
         _conversionInput.value = "1"
@@ -199,8 +211,8 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun formatResult(result: Double): String {
-        return if (result.isNaN()) {
-            "Error"
+        return if (result.isNaN() || result.isInfinite()) {
+            "undefined"
         } else if (result % 1 == 0.0) {
             result.toLong().toString()
         } else {

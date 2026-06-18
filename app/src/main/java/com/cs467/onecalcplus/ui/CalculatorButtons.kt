@@ -57,8 +57,7 @@ fun CalcButton(
 
     Box(
         modifier = modifier
-            .padding(4.dp)
-            .aspectRatio(if (isScientific) 1.5f else 1f)
+            .padding(4.dp) // Original padding restored
             .clip(shape)
             .then(backgroundModifier)
             .clickable(
@@ -72,7 +71,7 @@ fun CalcButton(
             text = text,
             color = if (isAction) MaterialTheme.colorScheme.onPrimaryContainer else contentColor,
             style = MaterialTheme.typography.titleMedium,
-            fontSize = if (isScientific) 14.sp else 24.sp,
+            fontSize = if (isScientific) 16.sp else 24.sp,
             fontWeight = FontWeight.Medium
         )
     }
