@@ -16,13 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cs467.onecalcplus.ui.theme.Primary
 import com.cs467.onecalcplus.ui.theme.PrimaryContainer
 import com.cs467.onecalcplus.ui.theme.SurfaceBright
-import com.cs467.onecalcplus.ui.theme.PrimaryDim
 
 @Composable
 fun CalcButton(
@@ -32,16 +32,11 @@ fun CalcButton(
     backgroundColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     isAction: Boolean = false,
-    isScientific: Boolean = false
+    shape: Shape = RoundedCornerShape(24.dp),
+    fontSize: Int = 24
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-
-    val shape = when {
-        isAction -> RoundedCornerShape(48.dp)
-        isScientific -> RoundedCornerShape(8.dp)
-        else -> RoundedCornerShape(24.dp)
-    }
 
     val backgroundModifier = if (isAction) {
         Modifier.background(
@@ -57,7 +52,7 @@ fun CalcButton(
 
     Box(
         modifier = modifier
-            .padding(4.dp) // Original padding restored
+            .padding(4.dp)
             .clip(shape)
             .then(backgroundModifier)
             .clickable(
@@ -71,7 +66,7 @@ fun CalcButton(
             text = text,
             color = if (isAction) MaterialTheme.colorScheme.onPrimaryContainer else contentColor,
             style = MaterialTheme.typography.titleMedium,
-            fontSize = if (isScientific) 16.sp else 24.sp,
+            fontSize = fontSize.sp,
             fontWeight = FontWeight.Medium
         )
     }

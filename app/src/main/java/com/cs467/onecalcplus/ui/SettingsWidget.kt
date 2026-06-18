@@ -23,8 +23,8 @@ fun SettingsWidget(
 
     Box(
         modifier = modifier
-            .padding(horizontal = 4.dp),
-        contentAlignment = Alignment.TopStart
+            .fillMaxWidth(),
+        contentAlignment = Alignment.TopStart // Original position
     ) {
         IconButton(
             onClick = { expanded = true },

@@ -2,6 +2,7 @@ package com.cs467.onecalcplus.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Science
 import androidx.compose.material3.*
@@ -59,7 +60,11 @@ fun CalculatorScreen(
         Box(modifier = Modifier.padding(innerPadding)) {
             when (mode) {
                 CalculatorMode.CALCULATOR -> {
-                    CalculatorLayout(viewModel)
+                    if (isScientificExpanded) {
+                        ScientificCalculatorView(viewModel)
+                    } else {
+                        StandardCalculatorView(viewModel)
+                    }
                 }
                 CalculatorMode.UNIT_CONVERSION, CalculatorMode.KITCHEN_CONVERSION -> {
                     ConversionLayout(viewModel)
@@ -70,9 +75,7 @@ fun CalculatorScreen(
 }
 
 @Composable
-fun CalculatorLayout(viewModel: CalculatorViewModel) {
-    val isScientificExpanded = viewModel.isScientificExpanded.value
-    
+fun StandardCalculatorView(viewModel: CalculatorViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -86,146 +89,184 @@ fun CalculatorLayout(viewModel: CalculatorViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth().weight(2f), // Increased weight for button area
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        // Standard Layout - completely untouched by Scientific Mode
+        Column(
+            modifier = Modifier.weight(2f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            if (isScientificExpanded) {
-                ScientificColumn(
-                    viewModel = viewModel,
-                    modifier = Modifier.weight(1f).fillMaxHeight()
+            val standardButtons = listOf(
+                listOf("C", "÷", "%", "⌫"),
+                listOf("7", "8", "9", "×"),
+                listOf("4", "5", "6", "-"),
+                listOf("1", "2", "3", "+")
+            )
+
+            standardButtons.forEach { row ->
+                Row(
+                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    row.forEach { text ->
+                        val isOperator = text in listOf("÷", "×", "-", "+", "%", "⌫", "C")
+                        CalcButton(
+                            text = text,
+                            modifier = Modifier.weight(1f).fillMaxHeight(),
+                            onClick = {
+                                when (text) {
+                                    "C" -> viewModel.clear()
+                                    "⌫" -> viewModel.onBackspaceClick()
+                                    in listOf("÷", "×", "-", "+", "%") -> viewModel.onOperationClick(text)
+                                    else -> viewModel.onNumberClick(text)
+                                }
+                            },
+                            backgroundColor = if (isOperator) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.surfaceVariant,
+                            contentColor = if (isOperator) MaterialTheme.colorScheme.onTertiary else MaterialTheme.colorScheme.onSurface,
+                            shape = RoundedCornerShape(24.dp), // CIRCLE
+                            fontSize = 24
+                        )
+                    }
+                }
+            }
+
+            // Bottom row for 0, ., and = (Original pill shape for =)
+            Row(
+                modifier = Modifier.fillMaxWidth().weight(1f),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                CalcButton(
+                    text = "0",
+                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                    onClick = { viewModel.onNumberClick("0") },
+                    shape = RoundedCornerShape(24.dp),
+                    fontSize = 24
                 )
-            }
-
-            StandardColumn(
-                viewModel = viewModel,
-                isScientificExpanded = isScientificExpanded,
-                modifier = Modifier.weight(1f).fillMaxHeight()
-            )
-        }
-
-        if (isScientificExpanded) {
-            // Full-width Equals button for scientific mode - further reduced height
-            Spacer(modifier = Modifier.height(8.dp))
-            CalcButton(
-                text = "=",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
-                onClick = { viewModel.calculate() },
-                isAction = true
-            )
-        }
-    }
-}
-
-@Composable
-fun ScientificColumn(viewModel: CalculatorViewModel, modifier: Modifier = Modifier) {
-    val scientificButtons = listOf(
-        listOf("sin", "cos"),
-        listOf("tan", "log"),
-        listOf("ln", "√"),
-        listOf("π", "e"),
-        listOf("^", "x²"),
-        listOf("|x|", "exp")
-    )
-    
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        scientificButtons.forEach { row ->
-            Row(
-                modifier = Modifier.fillMaxWidth().weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                row.forEach { text ->
-                    CalcButton(
-                        text = text,
-                        modifier = Modifier.weight(1f).fillMaxHeight(),
-                        onClick = { viewModel.onScientificOperation(text) },
-                        backgroundColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                        contentColor = MaterialTheme.colorScheme.tertiary,
-                        isScientific = true
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun StandardColumn(
-    viewModel: CalculatorViewModel, 
-    isScientificExpanded: Boolean,
-    modifier: Modifier = Modifier
-) {
-    val standardButtons = listOf(
-        listOf("C", "÷", "%", "⌫"),
-        listOf("7", "8", "9", "×"),
-        listOf("4", "5", "6", "-"),
-        listOf("1", "2", "3", "+")
-    )
-
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(if (isScientificExpanded) 4.dp else 8.dp)
-    ) {
-        standardButtons.forEach { row ->
-            Row(
-                modifier = Modifier.fillMaxWidth().weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(if (isScientificExpanded) 4.dp else 8.dp)
-            ) {
-                row.forEach { text ->
-                    val isOperator = text in listOf("÷", "×", "-", "+", "%", "⌫", "C")
-                    CalcButton(
-                        text = text,
-                        modifier = Modifier.weight(1f).fillMaxHeight(),
-                        onClick = {
-                            when (text) {
-                                "C" -> viewModel.clear()
-                                "⌫" -> viewModel.onBackspaceClick()
-                                in listOf("÷", "×", "-", "+", "%") -> viewModel.onOperationClick(text)
-                                else -> viewModel.onNumberClick(text)
-                            }
-                        },
-                        backgroundColor = if (isOperator) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = if (isOperator) MaterialTheme.colorScheme.onTertiary else MaterialTheme.colorScheme.onSurface,
-                        isScientific = isScientificExpanded
-                    )
-                }
-            }
-        }
-
-        // Bottom row for 0 and .
-        Row(
-            modifier = Modifier.fillMaxWidth().weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(if (isScientificExpanded) 4.dp else 8.dp)
-        ) {
-            CalcButton(
-                text = "0",
-                modifier = Modifier.weight(if (isScientificExpanded) 1f else 1f).fillMaxHeight(),
-                onClick = { viewModel.onNumberClick("0") },
-                isScientific = isScientificExpanded
-            )
-            CalcButton(
-                text = ".",
-                modifier = Modifier.weight(1f).fillMaxHeight(),
-                onClick = { viewModel.onNumberClick(".") },
-                isScientific = isScientificExpanded
-            )
-            
-            if (!isScientificExpanded) {
+                CalcButton(
+                    text = ".",
+                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                    onClick = { viewModel.onNumberClick(".") },
+                    shape = RoundedCornerShape(24.dp),
+                    fontSize = 24
+                )
                 CalcButton(
                     text = "=",
                     modifier = Modifier.weight(2f).fillMaxHeight(),
                     onClick = { viewModel.calculate() },
-                    isAction = true
+                    isAction = true,
+                    shape = RoundedCornerShape(48.dp), // PILL
+                    fontSize = 24
                 )
-            } else {
-                Spacer(modifier = Modifier.weight(2f))
             }
         }
+    }
+}
+
+@Composable
+fun ScientificCalculatorView(viewModel: CalculatorViewModel) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+    ) {
+        CalculatorDisplay(
+            equation = viewModel.equationState.value,
+            result = viewModel.displayState.value,
+            modifier = Modifier.weight(0.8f) // Reduced display weight to give keys more room
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Main Grid Area
+        Row(
+            modifier = Modifier.fillMaxWidth().weight(3f), // Significantly increased weight for buttons
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            // Scientific Column (SMALLER)
+            Column(
+                modifier = Modifier.weight(0.6f).fillMaxHeight(), // Further reduced weight
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                val scientificButtons = listOf(
+                    listOf("sin", "cos"),
+                    listOf("tan", "log"),
+                    listOf("ln", "√"),
+                    listOf("π", "e"),
+                    listOf("^", "x²"),
+                    listOf("|x|", "exp")
+                )
+                scientificButtons.forEach { row ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        row.forEach { text ->
+                            CalcButton(
+                                text = text,
+                                modifier = Modifier.weight(1f).fillMaxHeight(),
+                                onClick = { viewModel.onScientificOperation(text) },
+                                backgroundColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                contentColor = MaterialTheme.colorScheme.tertiary,
+                                shape = RoundedCornerShape(8.dp),
+                                fontSize = 13 // Slightly smaller font
+                            )
+                        }
+                    }
+                }
+            }
+
+            // Standard Column (LARGER)
+            Column(
+                modifier = Modifier.weight(1.4f).fillMaxHeight(), // Further increased weight
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                val standardRows = listOf(
+                    listOf("C", "÷", "%", "⌫"),
+                    listOf("7", "8", "9", "×"),
+                    listOf("4", "5", "6", "-"),
+                    listOf("1", "2", "3", "+"),
+                    listOf("0", ".")
+                )
+                
+                standardRows.forEach { row ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        row.forEach { text ->
+                            val isOperator = text in listOf("÷", "×", "-", "+", "%", "⌫", "C")
+                            CalcButton(
+                                text = text,
+                                modifier = Modifier.weight(if (text == "0") 2f else 1f).fillMaxHeight(),
+                                onClick = {
+                                    when (text) {
+                                        "C" -> viewModel.clear()
+                                        "⌫" -> viewModel.onBackspaceClick()
+                                        in listOf("÷", "×", "-", "+", "%") -> viewModel.onOperationClick(text)
+                                        else -> viewModel.onNumberClick(text)
+                                    }
+                                },
+                                backgroundColor = if (isOperator) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.surfaceVariant,
+                                contentColor = if (isOperator) MaterialTheme.colorScheme.onTertiary else MaterialTheme.colorScheme.onSurface,
+                                shape = RoundedCornerShape(8.dp),
+                                fontSize = 22 // Even larger font for standard
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // Full-width Equals Footer - Sleeker Height
+        Spacer(modifier = Modifier.height(8.dp))
+        CalcButton(
+            text = "=",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(44.dp), // Further reduced height for sleek action bar
+            onClick = { viewModel.calculate() },
+            isAction = true,
+            shape = RoundedCornerShape(8.dp),
+            fontSize = 24
+        )
     }
 }
 
