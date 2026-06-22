@@ -89,7 +89,7 @@ fun ConversionLayout(
                 listOf("7", "8", "9"),
                 listOf("4", "5", "6"),
                 listOf("1", "2", "3"),
-                listOf(".", "0", "⌫")
+                listOf(".", "0", "⌫", "C")
             )
 
             Column(modifier = Modifier.weight(1f)) {
@@ -104,12 +104,25 @@ fun ConversionLayout(
                                     .clip(RoundedCornerShape(12.dp))
                                     .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                                     .clickable { 
-                                        if (char == "⌫") viewModel.onBackspaceClick()
-                                        else viewModel.onNumberClick(char)
+                                        when (char) {
+                                            "⌫" -> viewModel.onBackspaceClick()
+                                            "C" -> {
+                                                // Reset only the conversion input, not the whole selection
+                                                // We can use clear() but need to re-select the item to keep the UI state
+                                                val currentItem = selectedConversion
+                                                viewModel.clear()
+                                                if (currentItem != null) viewModel.selectConversion(currentItem)
+                                            }
+                                            else -> viewModel.onNumberClick(char)
+                                        }
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(text = char, style = MaterialTheme.typography.titleMedium)
+                                Text(
+                                    text = char, 
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = if (char == "C") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+                                )
                             }
                         }
                     }

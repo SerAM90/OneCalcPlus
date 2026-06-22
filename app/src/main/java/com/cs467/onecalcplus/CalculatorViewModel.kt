@@ -41,6 +41,7 @@ class CalculatorViewModel : ViewModel() {
     private var lastOperand: BigDecimal? = null
     private var pendingOperation: String? = null
     private var isNewInput = true
+    private var isNewConversionInput = true
 
     fun onNumberClick(number: String) {
         val currentMode = _mode.value
@@ -55,10 +56,9 @@ class CalculatorViewModel : ViewModel() {
         } else {
             // Handle number input for conversions
             val currentConvInput = _conversionInput.value
-            if (currentConvInput == "1") {
+            if (isNewConversionInput || currentConvInput == "0" && number != ".") {
                 _conversionInput.value = number
-            } else if (currentConvInput == "0" && number != ".") {
-                _conversionInput.value = number
+                isNewConversionInput = false
             } else {
                 _conversionInput.value = currentConvInput + number
             }
@@ -81,6 +81,7 @@ class CalculatorViewModel : ViewModel() {
                 _conversionInput.value = currentConvInput.dropLast(1)
             } else {
                 _conversionInput.value = "0"
+                isNewConversionInput = true
             }
         }
     }
@@ -178,6 +179,7 @@ class CalculatorViewModel : ViewModel() {
         lastOperand = null
         pendingOperation = null
         isNewInput = true
+        isNewConversionInput = true
     }
 
     fun setMode(newMode: CalculatorMode) {
@@ -192,6 +194,7 @@ class CalculatorViewModel : ViewModel() {
     fun selectConversion(item: ConversionItem) {
         _selectedConversion.value = item
         _conversionInput.value = "1"
+        isNewConversionInput = true
     }
 
     fun getConversionResult(): String {

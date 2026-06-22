@@ -79,6 +79,27 @@ class CalculatorViewModelTest {
     }
 
     @Test
+    fun testConversionInputAppend() {
+        viewModel.setMode(CalculatorMode.UNIT_CONVERSION)
+        val item = ConversionItem("m to ft", 3.28084, "length")
+        viewModel.selectConversion(item)
+        
+        // Initial value is "1"
+        assertEquals("1", viewModel.conversionInput.value)
+        
+        // Click "1" should replace the initial "1" with "1" and set isNewConversionInput to false
+        viewModel.onNumberClick("1")
+        assertEquals("1", viewModel.conversionInput.value)
+        
+        // Click "2" should append to "1" to get "12"
+        viewModel.onNumberClick("2")
+        assertEquals("12", viewModel.conversionInput.value)
+        
+        // result = 12 * 3.28084 = 39.37008
+        assertEquals("39.37008", viewModel.getConversionResult())
+    }
+
+    @Test
     fun testClear() {
         viewModel.onNumberClick("1")
         viewModel.onNumberClick("2")
