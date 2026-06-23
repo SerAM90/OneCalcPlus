@@ -1,8 +1,10 @@
 package com.cs467.onecalcplus
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import java.math.RoundingMode
 import kotlin.math.*
@@ -14,80 +16,119 @@ enum class CalculatorMode {
 data class ConversionItem(
     val label: String,
     val factor: Double,
-    val type: String // e.g., "length", "weight", "volume"
+    val type: String
 )
+
+/**
+ * UI State for the Calculator, following MAD standards by grouping related fields.
+ */
+data class CalculatorUiState(
+    val display: String = "0",
+    val equation: String = "",
+    val mode: CalculatorMode = CalculatorMode.CALCULATOR,
+    val isScientificExpanded: Boolean = false,
+    val conversionInput: String = "0",
+    val selectedConversion: ConversionItem? = null
+)
+
+/**
+ * UI Events to handle user interactions via Unidirectional Data Flow.
+ */
+sealed class CalculatorUiEvent {
+    data class NumberClick(val number: String) : CalculatorUiEvent()
+    data class OperationClick(val operation: String) : CalculatorUiEvent()
+    data class ScientificOperationClick(val operation: String) : CalculatorUiEvent()
+    object Calculate : CalculatorUiEvent()
+    object Backspace : CalculatorUiEvent()
+    object Clear : CalculatorUiEvent()
+    data class SetMode(val mode: CalculatorMode) : CalculatorUiEvent()
+    object ToggleScientific : CalculatorUiEvent()
+    data class SelectConversion(val item: ConversionItem) : CalculatorUiEvent()
+    object BackToConversionList : CalculatorUiEvent()
+}
 
 class CalculatorViewModel : ViewModel() {
 
-    private val _displayState = mutableStateOf("0")
-    val displayState: State<String> = _displayState
-
-    private val _equationState = mutableStateOf("")
-    val equationState: State<String> = _equationState
-
-    private val _mode = mutableStateOf(CalculatorMode.CALCULATOR)
-    val mode: State<CalculatorMode> = _mode
-
-    private val _isScientificExpanded = mutableStateOf(false)
-    val isScientificExpanded: State<Boolean> = _isScientificExpanded
-
-    // State for interactive conversions
-    private val _conversionInput = mutableStateOf("")
-    val conversionInput: State<String> = _conversionInput
-
-    private val _selectedConversion = mutableStateOf<ConversionItem?>(null)
-    val selectedConversion: State<ConversionItem?> = _selectedConversion
+    private val _uiState = MutableStateFlow(CalculatorUiState())
+    val uiState: StateFlow<CalculatorUiState> = _uiState.asStateFlow()
 
     private var lastOperand: BigDecimal? = null
     private var pendingOperation: String? = null
     private var isNewInput = true
     private var isNewConversionInput = true
 
-    fun onNumberClick(number: String) {
-        val currentMode = _mode.value
-        if (currentMode == CalculatorMode.CALCULATOR) {
-            val currentDisplay = _displayState.value
-            if (isNewInput || currentDisplay == "0" || currentDisplay == "undefined") {
-                _displayState.value = number
+    /**
+     * Primary entry point for UI events.
+     */
+    fun onEvent(event: CalculatorUiEvent) {
+        when (event) {
+            is CalculatorUiEvent.NumberClick -> handleNumberClick(event.number)
+            is CalculatorUiEvent.OperationClick -> handleOperationClick(event.operation)
+            is CalculatorUiEvent.ScientificOperationClick -> handleScientificOperation(event.operation)
+            CalculatorUiEvent.Calculate -> calculate()
+            CalculatorUiEvent.Backspace -> handleBackspace()
+            CalculatorUiEvent.Clear -> reset()
+            is CalculatorUiEvent.SetMode -> setMode(event.mode)
+            CalculatorUiEvent.ToggleScientific -> toggleScientific()
+            is CalculatorUiEvent.SelectConversion -> selectConversion(event.item)
+            CalculatorUiEvent.BackToConversionList -> backToConversionList()
+        }
+    }
+
+    private fun handleNumberClick(number: String) {
+        if (_uiState.value.mode == CalculatorMode.CALCULATOR) {
+            _uiState.update { state ->
+                val currentDisplay = state.display
+                val newDisplay = if (isNewInput || currentDisplay == "0" || currentDisplay == "undefined") {
+                    number
+                } else {
+                    currentDisplay + number
+                }
                 isNewInput = false
-            } else {
-                _displayState.value = currentDisplay + number
+                state.copy(display = newDisplay)
             }
         } else {
-            // Handle number input for conversions
-            val currentConvInput = _conversionInput.value
-            if (isNewConversionInput || currentConvInput == "0" && number != ".") {
-                _conversionInput.value = number
-                isNewConversionInput = false
-            } else {
-                _conversionInput.value = currentConvInput + number
+            _uiState.update { state ->
+                val currentConvInput = state.conversionInput
+                val newConvInput = if (isNewConversionInput || currentConvInput == "0" && number != ".") {
+                    isNewConversionInput = false
+                    number
+                } else {
+                    currentConvInput + number
+                }
+                state.copy(conversionInput = newConvInput)
             }
         }
     }
 
-    fun onBackspaceClick() {
-        val currentMode = _mode.value
-        if (currentMode == CalculatorMode.CALCULATOR) {
-            val currentDisplay = _displayState.value
-            if (currentDisplay.length > 1) {
-                _displayState.value = currentDisplay.dropLast(1)
-            } else {
-                _displayState.value = "0"
-                isNewInput = true
+    private fun handleBackspace() {
+        if (_uiState.value.mode == CalculatorMode.CALCULATOR) {
+            _uiState.update { state ->
+                val currentDisplay = state.display
+                val newDisplay = if (currentDisplay.length > 1 && currentDisplay != "undefined") {
+                    currentDisplay.dropLast(1)
+                } else {
+                    isNewInput = true
+                    "0"
+                }
+                state.copy(display = newDisplay)
             }
         } else {
-            val currentConvInput = _conversionInput.value
-            if (currentConvInput.length > 1) {
-                _conversionInput.value = currentConvInput.dropLast(1)
-            } else {
-                _conversionInput.value = "0"
-                isNewConversionInput = true
+            _uiState.update { state ->
+                val currentConvInput = state.conversionInput
+                val newConvInput = if (currentConvInput.length > 1) {
+                    currentConvInput.dropLast(1)
+                } else {
+                    isNewConversionInput = true
+                    "0"
+                }
+                state.copy(conversionInput = newConvInput)
             }
         }
     }
 
-    fun onOperationClick(operation: String) {
-        val currentValueStr = _displayState.value
+    private fun handleOperationClick(operation: String) {
+        val currentValueStr = _uiState.value.display
         val currentValue = try {
             BigDecimal(currentValueStr)
         } catch (e: Exception) {
@@ -95,18 +136,23 @@ class CalculatorViewModel : ViewModel() {
         }
         
         if (lastOperand != null && pendingOperation != null) {
-            calculate()
+            performCalculation()
         } else {
             lastOperand = currentValue
         }
         
         pendingOperation = operation
-        _equationState.value = "${formatBigDecimal(lastOperand!!)} $operation"
+        val eq = "${formatBigDecimal(lastOperand!!)} $operation"
+        _uiState.update { it.copy(equation = eq) }
         isNewInput = true
     }
 
-    fun calculate() {
-        val currentValueStr = _displayState.value
+    private fun calculate() {
+        performCalculation()
+    }
+
+    private fun performCalculation() {
+        val currentValueStr = _uiState.value.display
         val currentValue = try {
             BigDecimal(currentValueStr)
         } catch (e: Exception) {
@@ -116,8 +162,7 @@ class CalculatorViewModel : ViewModel() {
         val operation = pendingOperation ?: return
 
         if (operation == "÷" && currentValue.compareTo(BigDecimal.ZERO) == 0) {
-            _displayState.value = "undefined"
-            _equationState.value = ""
+            _uiState.update { it.copy(display = "undefined", equation = "") }
             lastOperand = null
             pendingOperation = null
             isNewInput = true
@@ -142,15 +187,14 @@ class CalculatorViewModel : ViewModel() {
             BigDecimal.ZERO
         }
 
-        _displayState.value = formatBigDecimal(result)
-        _equationState.value = ""
+        _uiState.update { it.copy(display = formatBigDecimal(result), equation = "") }
         lastOperand = null
         pendingOperation = null
         isNewInput = true
     }
 
-    fun onScientificOperation(operation: String) {
-        val currentValueStr = _displayState.value
+    private fun handleScientificOperation(operation: String) {
+        val currentValueStr = _uiState.value.display
         val currentValue = currentValueStr.toDoubleOrNull() ?: return
         val result = when (operation) {
             "sin" -> sin(Math.toRadians(currentValue))
@@ -167,45 +211,51 @@ class CalculatorViewModel : ViewModel() {
             "exp" -> exp(currentValue)
             else -> currentValue
         }
-        _displayState.value = formatResult(result)
+        _uiState.update { it.copy(display = formatResult(result)) }
         isNewInput = true
     }
 
-    fun clear() {
-        _displayState.value = "0"
-        _equationState.value = ""
-        _conversionInput.value = "0"
-        _selectedConversion.value = null
+    private fun reset() {
+        _uiState.update { 
+            it.copy(
+                display = "0", 
+                equation = "", 
+                conversionInput = "0", 
+                selectedConversion = null
+            )
+        }
         lastOperand = null
         pendingOperation = null
         isNewInput = true
         isNewConversionInput = true
     }
 
-    fun setMode(newMode: CalculatorMode) {
-        _mode.value = newMode
-        clear()
+    private fun setMode(newMode: CalculatorMode) {
+        _uiState.update { it.copy(mode = newMode) }
+        reset()
     }
 
-    fun toggleScientific() {
-        _isScientificExpanded.value = !_isScientificExpanded.value
+    private fun toggleScientific() {
+        _uiState.update { it.copy(isScientificExpanded = !it.isScientificExpanded) }
     }
 
-    fun selectConversion(item: ConversionItem) {
-        _selectedConversion.value = item
-        _conversionInput.value = "1"
+    private fun selectConversion(item: ConversionItem) {
+        _uiState.update { it.copy(selectedConversion = item, conversionInput = "1") }
         isNewConversionInput = true
     }
 
-    fun getConversionResult(): String {
-        val inputStr = _conversionInput.value
-        val input = try {
-            inputStr.toDouble()
+    private fun backToConversionList() {
+        _uiState.update { it.copy(selectedConversion = null, conversionInput = "0") }
+        isNewConversionInput = true
+    }
+
+    fun getConversionResult(input: String, factor: Double): String {
+        val valDouble = try {
+            input.toDouble()
         } catch (e: Exception) {
             0.0
         }
-        val factor = _selectedConversion.value?.factor ?: 1.0
-        return formatResult(input * factor)
+        return formatResult(valDouble * factor)
     }
 
     private fun formatBigDecimal(value: BigDecimal): String {

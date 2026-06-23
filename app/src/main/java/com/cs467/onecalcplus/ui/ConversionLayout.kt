@@ -12,14 +12,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cs467.onecalcplus.CalculatorMode
+import com.cs467.onecalcplus.CalculatorUiEvent
 import com.cs467.onecalcplus.CalculatorViewModel
 import com.cs467.onecalcplus.ConversionItem
-import androidx.compose.ui.tooling.preview.Preview
+import com.cs467.onecalcplus.R
 import com.cs467.onecalcplus.ui.theme.OneCalcPlusTheme
 
 @Composable
@@ -27,30 +31,47 @@ fun ConversionLayout(
     viewModel: CalculatorViewModel,
     modifier: Modifier = Modifier
 ) {
-    val mode = viewModel.mode.value
-    val title = if (mode == CalculatorMode.UNIT_CONVERSION) "Unit Conversions" else "Kitchen Conversions"
-    val selectedConversion = viewModel.selectedConversion.value
-    val conversionInput = viewModel.conversionInput.value
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    
+    val title = if (uiState.mode == CalculatorMode.UNIT_CONVERSION) {
+        stringResource(R.string.unit_conversions)
+    } else {
+        stringResource(R.string.kitchen_conversions)
+    }
 
-    val unitConversions = listOf(
-        ConversionItem("cm to inch", 0.393701, "length"),
-        ConversionItem("m to ft", 3.28084, "length"),
-        ConversionItem("kg to lb", 2.20462, "weight"),
-        ConversionItem("km to mile", 0.621371, "length"),
-        ConversionItem("Celsius to F", 1.8, "temperature"),
-        ConversionItem("L to gal", 0.264172, "volume")
-    )
+    val selectedConversion = uiState.selectedConversion
+    val conversionInput = uiState.conversionInput
 
-    val kitchenConversions = listOf(
-        ConversionItem("Cup to ml", 236.588, "volume"),
-        ConversionItem("Tbsp to ml", 14.7868, "volume"),
-        ConversionItem("tsp to ml", 4.92892, "volume"),
-        ConversionItem("oz to g", 28.3495, "weight"),
-        ConversionItem("lb to g", 453.592, "weight"),
-        ConversionItem("Stick of Butter to g", 113.0, "weight")
-    )
+    // Optimization: Calculate result only when inputs change
+    val conversionResult = remember(conversionInput, selectedConversion) {
+        if (selectedConversion != null) {
+            viewModel.getConversionResult(conversionInput, selectedConversion.factor)
+        } else ""
+    }
 
-    val conversions = if (mode == CalculatorMode.UNIT_CONVERSION) unitConversions else kitchenConversions
+    val unitConversions = remember {
+        listOf(
+            ConversionItem("cm to inch", 0.393701, "length"),
+            ConversionItem("m to ft", 3.28084, "length"),
+            ConversionItem("kg to lb", 2.20462, "weight"),
+            ConversionItem("km to mile", 0.621371, "length"),
+            ConversionItem("Celsius to F", 1.8, "temperature"),
+            ConversionItem("L to gal", 0.264172, "volume")
+        )
+    }
+
+    val kitchenConversions = remember {
+        listOf(
+            ConversionItem("Cup to ml", 236.588, "volume"),
+            ConversionItem("Tbsp to ml", 14.7868, "volume"),
+            ConversionItem("tsp to ml", 4.92892, "volume"),
+            ConversionItem("oz to g", 28.3495, "weight"),
+            ConversionItem("lb to g", 453.592, "weight"),
+            ConversionItem("Stick of Butter to g", 113.0, "weight")
+        )
+    }
+
+    val conversions = if (uiState.mode == CalculatorMode.UNIT_CONVERSION) unitConversions else kitchenConversions
 
     Column(
         modifier = modifier
@@ -79,18 +100,20 @@ fun ConversionLayout(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(text = "=", fontSize = 24.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = viewModel.getConversionResult(), fontSize = 32.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                        Text(text = conversionResult, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
 
             // Number Pad for Conversion Input
-            val numPad = listOf(
-                listOf("7", "8", "9"),
-                listOf("4", "5", "6"),
-                listOf("1", "2", "3"),
-                listOf(".", "0", "⌫", "C")
-            )
+            val numPad = remember {
+                listOf(
+                    listOf("7", "8", "9"),
+                    listOf("4", "5", "6"),
+                    listOf("1", "2", "3"),
+                    listOf(".", "0", "⌫", "C")
+                )
+            }
 
             Column(modifier = Modifier.weight(1f)) {
                 numPad.forEach { row ->
@@ -105,15 +128,9 @@ fun ConversionLayout(
                                     .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                                     .clickable { 
                                         when (char) {
-                                            "⌫" -> viewModel.onBackspaceClick()
-                                            "C" -> {
-                                                // Reset only the conversion input, not the whole selection
-                                                // We can use clear() but need to re-select the item to keep the UI state
-                                                val currentItem = selectedConversion
-                                                viewModel.clear()
-                                                if (currentItem != null) viewModel.selectConversion(currentItem)
-                                            }
-                                            else -> viewModel.onNumberClick(char)
+                                            "⌫" -> viewModel.onEvent(CalculatorUiEvent.Backspace)
+                                            "C" -> viewModel.onEvent(CalculatorUiEvent.SelectConversion(selectedConversion))
+                                            else -> viewModel.onEvent(CalculatorUiEvent.NumberClick(char))
                                         }
                                     },
                                 contentAlignment = Alignment.Center
@@ -142,7 +159,7 @@ fun ConversionLayout(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.dp)
-                            .clickable { viewModel.selectConversion(item) }
+                            .clickable { viewModel.onEvent(CalculatorUiEvent.SelectConversion(item)) }
                     ) {
                         Box(
                             modifier = Modifier.fillMaxSize().padding(8.dp),
@@ -160,13 +177,13 @@ fun ConversionLayout(
         }
         
         CalcButton(
-            text = if (selectedConversion != null) "Back to List" else "Back to Calculator",
+            text = if (selectedConversion != null) stringResource(R.string.back_to_list) else stringResource(R.string.back_to_calculator),
             modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
             onClick = { 
                 if (selectedConversion != null) {
-                    viewModel.clear()
+                    viewModel.onEvent(CalculatorUiEvent.BackToConversionList)
                 } else {
-                    viewModel.setMode(CalculatorMode.CALCULATOR)
+                    viewModel.onEvent(CalculatorUiEvent.SetMode(CalculatorMode.CALCULATOR))
                 }
             },
             backgroundColor = MaterialTheme.colorScheme.tertiary,
@@ -179,7 +196,7 @@ fun ConversionLayout(
 @Composable
 fun ConversionLayoutPreview() {
     val viewModel = CalculatorViewModel()
-    viewModel.setMode(CalculatorMode.UNIT_CONVERSION)
+    viewModel.onEvent(CalculatorUiEvent.SetMode(CalculatorMode.UNIT_CONVERSION))
     OneCalcPlusTheme {
         ConversionLayout(viewModel = viewModel)
     }

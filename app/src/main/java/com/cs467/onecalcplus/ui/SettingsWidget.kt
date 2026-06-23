@@ -10,9 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.cs467.onecalcplus.CalculatorMode
+import com.cs467.onecalcplus.CalculatorUiEvent
 import com.cs467.onecalcplus.CalculatorViewModel
+import com.cs467.onecalcplus.R
 
 @Composable
 fun SettingsWidget(
@@ -22,9 +25,8 @@ fun SettingsWidget(
     var expanded by remember { mutableStateOf(false) }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth(),
-        contentAlignment = Alignment.TopStart // Original position
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.TopStart
     ) {
         IconButton(
             onClick = { expanded = true },
@@ -34,7 +36,7 @@ fun SettingsWidget(
         ) {
             Icon(
                 imageVector = Icons.Default.Settings,
-                contentDescription = "Settings",
+                contentDescription = stringResource(R.string.settings_description),
                 tint = MaterialTheme.colorScheme.primary
             )
         }
@@ -45,23 +47,23 @@ fun SettingsWidget(
             modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant)
         ) {
             DropdownMenuItem(
-                text = { Text("Standard Calculator", style = MaterialTheme.typography.titleMedium) },
+                text = { Text(stringResource(R.string.standard_calculator), style = MaterialTheme.typography.titleMedium) },
                 onClick = {
-                    viewModel.setMode(CalculatorMode.CALCULATOR)
+                    viewModel.onEvent(CalculatorUiEvent.SetMode(CalculatorMode.CALCULATOR))
                     expanded = false
                 }
             )
             DropdownMenuItem(
-                text = { Text("Unit Conversions", style = MaterialTheme.typography.titleMedium) },
+                text = { Text(stringResource(R.string.unit_conversions), style = MaterialTheme.typography.titleMedium) },
                 onClick = {
-                    viewModel.setMode(CalculatorMode.UNIT_CONVERSION)
+                    viewModel.onEvent(CalculatorUiEvent.SetMode(CalculatorMode.UNIT_CONVERSION))
                     expanded = false
                 }
             )
             DropdownMenuItem(
-                text = { Text("Kitchen Conversions", style = MaterialTheme.typography.titleMedium) },
+                text = { Text(stringResource(R.string.kitchen_conversions), style = MaterialTheme.typography.titleMedium) },
                 onClick = {
-                    viewModel.setMode(CalculatorMode.KITCHEN_CONVERSION)
+                    viewModel.onEvent(CalculatorUiEvent.SetMode(CalculatorMode.KITCHEN_CONVERSION))
                     expanded = false
                 }
             )
