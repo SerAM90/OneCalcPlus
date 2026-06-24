@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus.ui
+package com.cs467.onecalcplus.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme

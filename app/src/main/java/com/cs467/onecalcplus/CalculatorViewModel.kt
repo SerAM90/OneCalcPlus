@@ -1,6 +1,10 @@
 package com.cs467.onecalcplus
 
 import androidx.lifecycle.ViewModel
+import com.cs467.onecalcplus.model.CalculatorMode
+import com.cs467.onecalcplus.model.CalculatorUiEvent
+import com.cs467.onecalcplus.model.CalculatorUiState
+import com.cs467.onecalcplus.model.ConversionItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -8,44 +12,6 @@ import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import java.math.RoundingMode
 import kotlin.math.*
-
-enum class CalculatorMode {
-    CALCULATOR, UNIT_CONVERSION, KITCHEN_CONVERSION
-}
-
-data class ConversionItem(
-    val label: String,
-    val factor: Double,
-    val type: String
-)
-
-/**
- * UI State for the Calculator, following MAD standards by grouping related fields.
- */
-data class CalculatorUiState(
-    val display: String = "0",
-    val equation: String = "",
-    val mode: CalculatorMode = CalculatorMode.CALCULATOR,
-    val isScientificExpanded: Boolean = false,
-    val conversionInput: String = "0",
-    val selectedConversion: ConversionItem? = null
-)
-
-/**
- * UI Events to handle user interactions via Unidirectional Data Flow.
- */
-sealed class CalculatorUiEvent {
-    data class NumberClick(val number: String) : CalculatorUiEvent()
-    data class OperationClick(val operation: String) : CalculatorUiEvent()
-    data class ScientificOperationClick(val operation: String) : CalculatorUiEvent()
-    object Calculate : CalculatorUiEvent()
-    object Backspace : CalculatorUiEvent()
-    object Clear : CalculatorUiEvent()
-    data class SetMode(val mode: CalculatorMode) : CalculatorUiEvent()
-    object ToggleScientific : CalculatorUiEvent()
-    data class SelectConversion(val item: ConversionItem) : CalculatorUiEvent()
-    object BackToConversionList : CalculatorUiEvent()
-}
 
 class CalculatorViewModel : ViewModel() {
 

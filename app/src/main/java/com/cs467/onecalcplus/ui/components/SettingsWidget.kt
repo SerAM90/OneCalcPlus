@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus.ui
+package com.cs467.onecalcplus.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.cs467.onecalcplus.CalculatorMode
-import com.cs467.onecalcplus.CalculatorUiEvent
 import com.cs467.onecalcplus.CalculatorViewModel
 import com.cs467.onecalcplus.R
+import com.cs467.onecalcplus.model.CalculatorMode
+import com.cs467.onecalcplus.model.CalculatorUiEvent
 
 @Composable
 fun SettingsWidget(

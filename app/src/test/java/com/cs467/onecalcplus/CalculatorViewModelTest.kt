@@ -1,6 +1,8 @@
 package com.cs467.onecalcplus
 
-import kotlinx.coroutines.flow.first
+import com.cs467.onecalcplus.model.CalculatorMode
+import com.cs467.onecalcplus.model.CalculatorUiEvent
+import com.cs467.onecalcplus.model.ConversionItem
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -75,7 +77,7 @@ class CalculatorViewModelTest {
     fun testDivisionByZero() = runBlocking {
         viewModel.onEvent(CalculatorUiEvent.NumberClick("5"))
         viewModel.onEvent(CalculatorUiEvent.OperationClick("÷"))
-        viewModel.onEvent(CalculatorUiEvent.NumberClick("0"))
+        viewModel.onEvent(CalculatorUiEvent.NumberClick("0") )
         viewModel.onEvent(CalculatorUiEvent.Calculate)
         assertEquals("undefined", viewModel.uiState.value.display)
     }

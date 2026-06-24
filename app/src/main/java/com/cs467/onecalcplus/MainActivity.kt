@@ -5,15 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.cs467.onecalcplus.ui.CalculatorScreen
+import com.cs467.onecalcplus.ui.screens.CalculatorScreen
 import com.cs467.onecalcplus.ui.theme.OneCalcPlusTheme
 
 class MainActivity : ComponentActivity() {

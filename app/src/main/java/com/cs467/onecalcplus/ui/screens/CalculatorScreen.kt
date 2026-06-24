@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus.ui
+package com.cs467.onecalcplus.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,10 +14,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cs467.onecalcplus.CalculatorMode
-import com.cs467.onecalcplus.CalculatorUiEvent
 import com.cs467.onecalcplus.CalculatorViewModel
 import com.cs467.onecalcplus.R
+import com.cs467.onecalcplus.model.CalculatorMode
+import com.cs467.onecalcplus.model.CalculatorUiEvent
+import com.cs467.onecalcplus.ui.components.CalcButton
+import com.cs467.onecalcplus.ui.components.CalculatorDisplay
+import com.cs467.onecalcplus.ui.components.SettingsWidget
 import com.cs467.onecalcplus.ui.theme.OneCalcPlusTheme
 
 @Composable
@@ -96,6 +99,7 @@ fun StandardCalculatorView(viewModel: CalculatorViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Standard Layout - completely untouched by Scientific Mode
         Column(
             modifier = Modifier.weight(2f),
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -127,13 +131,14 @@ fun StandardCalculatorView(viewModel: CalculatorViewModel) {
                             },
                             backgroundColor = if (isOperator) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.surfaceVariant,
                             contentColor = if (isOperator) MaterialTheme.colorScheme.onTertiary else MaterialTheme.colorScheme.onSurface,
-                            shape = RoundedCornerShape(24.dp),
+                            shape = RoundedCornerShape(24.dp), // CIRCLE
                             fontSize = 24
                         )
                     }
                 }
             }
 
+            // Bottom row for 0, ., and = (Original pill shape for =)
             Row(
                 modifier = Modifier.fillMaxWidth().weight(1f),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -157,7 +162,7 @@ fun StandardCalculatorView(viewModel: CalculatorViewModel) {
                     modifier = Modifier.weight(2f).fillMaxHeight(),
                     onClick = { viewModel.onEvent(CalculatorUiEvent.Calculate) },
                     isAction = true,
-                    shape = RoundedCornerShape(48.dp),
+                    shape = RoundedCornerShape(48.dp), // PILL
                     fontSize = 24
                 )
             }
@@ -186,7 +191,7 @@ fun ScientificCalculatorView(viewModel: CalculatorViewModel) {
             modifier = Modifier.fillMaxWidth().weight(3f),
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            // Scientific Column
+            // Scientific Column (SMALLER)
             Column(
                 modifier = Modifier.weight(0.6f).fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -211,7 +216,7 @@ fun ScientificCalculatorView(viewModel: CalculatorViewModel) {
                                 onClick = { viewModel.onEvent(CalculatorUiEvent.ScientificOperationClick(text)) },
                                 backgroundColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                                 contentColor = MaterialTheme.colorScheme.tertiary,
-                                shape = RoundedCornerShape(8.dp),
+                                shape = RoundedCornerShape(8.dp), // SQUARE
                                 fontSize = 13
                             )
                         }
@@ -219,7 +224,7 @@ fun ScientificCalculatorView(viewModel: CalculatorViewModel) {
                 }
             }
 
-            // Standard Column
+            // Standard Column (LARGER)
             Column(
                 modifier = Modifier.weight(1.4f).fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -252,7 +257,7 @@ fun ScientificCalculatorView(viewModel: CalculatorViewModel) {
                                 },
                                 backgroundColor = if (isOperator) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.surfaceVariant,
                                 contentColor = if (isOperator) MaterialTheme.colorScheme.onTertiary else MaterialTheme.colorScheme.onSurface,
-                                shape = RoundedCornerShape(8.dp),
+                                shape = RoundedCornerShape(8.dp), // ALL SQUARE in scientific mode
                                 fontSize = 22
                             )
                         }

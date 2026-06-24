@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus.ui
+package com.cs467.onecalcplus.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
