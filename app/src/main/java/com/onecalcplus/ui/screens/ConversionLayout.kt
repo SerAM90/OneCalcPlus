@@ -100,16 +100,16 @@ fun ConversionLayout(
     val currencyConversions = remember {
         listOf(
             // USD as base
-            ConversionItem("USD to EUR", 0.95, "currency"),
-            ConversionItem("EUR to USD", 1.05, "currency"),
-            ConversionItem("USD to GBP", 0.79, "currency"),
-            ConversionItem("GBP to USD", 1.27, "currency"),
-            ConversionItem("USD to JPY", 150.0, "currency"),
-            ConversionItem("JPY to USD", 0.0067, "currency"),
-            ConversionItem("USD to CAD", 1.40, "currency"),
-            ConversionItem("CAD to USD", 0.71, "currency"),
-            ConversionItem("USD to AUD", 1.55, "currency"),
-            ConversionItem("AUD to USD", 0.65, "currency")
+            ConversionItem("USD to EUR", 0.95, "currency", "$", "€"),
+            ConversionItem("EUR to USD", 1.05, "currency", "€", "$"),
+            ConversionItem("USD to GBP", 0.79, "currency", "$", "£"),
+            ConversionItem("GBP to USD", 1.27, "currency", "£", "$"),
+            ConversionItem("USD to JPY", 150.0, "currency", "$", "¥"),
+            ConversionItem("JPY to USD", 0.0067, "currency", "¥", "$"),
+            ConversionItem("USD to CAD", 1.40, "currency", "$", "C$"),
+            ConversionItem("CAD to USD", 0.71, "currency", "C$", "$"),
+            ConversionItem("USD to AUD", 1.55, "currency", "$", "A$"),
+            ConversionItem("AUD to USD", 0.65, "currency", "A$", "$")
         )
     }
 
@@ -143,11 +143,19 @@ fun ConversionLayout(
                     Spacer(modifier = Modifier.height(16.dp))
                     
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = conversionInput, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                        val fromText = if (selectedConversion.fromSymbol.isNotEmpty()) {
+                            "$conversionInput ${selectedConversion.fromSymbol}"
+                        } else conversionInput
+                        
+                        val toText = if (selectedConversion.toSymbol.isNotEmpty()) {
+                            "$conversionResult ${selectedConversion.toSymbol}"
+                        } else conversionResult
+
+                        Text(text = fromText, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(text = "=", fontSize = 24.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = conversionResult, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                        Text(text = toText, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
@@ -241,9 +249,11 @@ fun ConversionLayout(
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
-fun ConversionLayoutPreview() {
+fun CurrencyConversionPreview() {
     val viewModel = CalculatorViewModel()
-    viewModel.onEvent(CalculatorUiEvent.SetMode(CalculatorMode.UNIT_CONVERSION))
+    viewModel.onEvent(CalculatorUiEvent.SetMode(CalculatorMode.CURRENCY_CONVERSION))
+    val yenItem = ConversionItem("USD to JPY", 150.0, "currency", "$", "¥")
+    viewModel.onEvent(CalculatorUiEvent.SelectConversion(yenItem))
     OneCalcPlusTheme {
         ConversionLayout(viewModel = viewModel)
     }
