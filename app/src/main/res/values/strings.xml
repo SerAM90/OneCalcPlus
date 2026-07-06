@@ -3,6 +3,7 @@
     <string name="standard_calculator">Standard Calculator</string>
     <string name="unit_conversions">Unit Conversions</string>
     <string name="kitchen_conversions">Kitchen Conversions</string>
+    <string name="currency_conversions">Currency Conversions</string>
     <string name="back_to_calculator">Back to Calculator</string>
     <string name="back_to_list">Back to List</string>
     <string name="settings_description">Settings</string>

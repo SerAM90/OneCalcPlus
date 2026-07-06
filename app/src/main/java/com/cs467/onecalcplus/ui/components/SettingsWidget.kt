@@ -67,6 +67,13 @@ fun SettingsWidget(
                     expanded = false
                 }
             )
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.currency_conversions), style = MaterialTheme.typography.titleMedium) },
+                onClick = {
+                    viewModel.onEvent(CalculatorUiEvent.SetMode(CalculatorMode.CURRENCY_CONVERSION))
+                    expanded = false
+                }
+            )
         }
     }
 }

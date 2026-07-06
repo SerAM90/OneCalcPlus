@@ -74,7 +74,9 @@ fun CalculatorScreen(
                         StandardCalculatorView(viewModel)
                     }
                 }
-                CalculatorMode.UNIT_CONVERSION, CalculatorMode.KITCHEN_CONVERSION -> {
+                CalculatorMode.UNIT_CONVERSION, 
+                CalculatorMode.KITCHEN_CONVERSION,
+                CalculatorMode.CURRENCY_CONVERSION -> {
                     ConversionLayout(viewModel)
                 }
             }

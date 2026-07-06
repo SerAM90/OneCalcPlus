@@ -215,13 +215,18 @@ class CalculatorViewModel : ViewModel() {
         isNewConversionInput = true
     }
 
-    fun getConversionResult(input: String, factor: Double): String {
+    fun getConversionResult(input: String, item: ConversionItem): String {
         val valDouble = try {
             input.toDouble()
         } catch (e: Exception) {
             0.0
         }
-        return formatResult(valDouble * factor)
+        
+        return if (item.label == "Celsius to F") {
+            formatResult((valDouble * 1.8) + 32)
+        } else {
+            formatResult(valDouble * item.factor)
+        }
     }
 
     private fun formatBigDecimal(value: BigDecimal): String {

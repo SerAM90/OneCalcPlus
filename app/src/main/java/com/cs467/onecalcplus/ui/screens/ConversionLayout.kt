@@ -34,10 +34,11 @@ fun ConversionLayout(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     
-    val title = if (uiState.mode == CalculatorMode.UNIT_CONVERSION) {
-        stringResource(R.string.unit_conversions)
-    } else {
-        stringResource(R.string.kitchen_conversions)
+    val title = when (uiState.mode) {
+        CalculatorMode.UNIT_CONVERSION -> stringResource(R.string.unit_conversions)
+        CalculatorMode.KITCHEN_CONVERSION -> stringResource(R.string.kitchen_conversions)
+        CalculatorMode.CURRENCY_CONVERSION -> stringResource(R.string.currency_conversions)
+        else -> ""
     }
 
     val selectedConversion = uiState.selectedConversion
@@ -46,33 +47,78 @@ fun ConversionLayout(
     // Optimization: Calculate result only when inputs change
     val conversionResult = remember(conversionInput, selectedConversion) {
         if (selectedConversion != null) {
-            viewModel.getConversionResult(conversionInput, selectedConversion.factor)
+            viewModel.getConversionResult(conversionInput, selectedConversion)
         } else ""
     }
 
     val unitConversions = remember {
         listOf(
+            // Length
             ConversionItem("cm to inch", 0.393701, "length"),
             ConversionItem("m to ft", 3.28084, "length"),
-            ConversionItem("kg to lb", 2.20462, "weight"),
             ConversionItem("km to mile", 0.621371, "length"),
-            ConversionItem("Celsius to F", 1.8, "temperature"),
-            ConversionItem("L to gal", 0.264172, "volume")
+            ConversionItem("inch to cm", 2.54, "length"),
+            ConversionItem("ft to m", 0.3048, "length"),
+            
+            // Weight/Mass
+            ConversionItem("kg to lb", 2.20462, "weight"),
+            ConversionItem("lb to kg", 0.453592, "weight"),
+            ConversionItem("g to oz", 0.035274, "weight"),
+            ConversionItem("oz to g", 28.3495, "weight"),
+            
+            // Volume
+            ConversionItem("L to gal", 0.264172, "volume"),
+            ConversionItem("gal to L", 3.78541, "volume"),
+            ConversionItem("ml to fl oz", 0.033814, "volume"),
+            
+            // Temperature (Note: Linear factor is a placeholder for non-offset temps like Kelvin, 
+            // but for C/F we use the ViewModel's special handling if implemented. 
+            // Currently using factor as a rough approximation for scale.)
+            ConversionItem("Celsius to F", 1.8, "temperature")
         )
     }
 
     val kitchenConversions = remember {
         listOf(
+            // Volume
             ConversionItem("Cup to ml", 236.588, "volume"),
+            ConversionItem("ml to Cup", 0.00422675, "volume"),
             ConversionItem("Tbsp to ml", 14.7868, "volume"),
             ConversionItem("tsp to ml", 4.92892, "volume"),
+            ConversionItem("fl oz to ml", 29.5735, "volume"),
+            ConversionItem("Pint to ml", 473.176, "volume"),
+            ConversionItem("Quart to ml", 946.353, "volume"),
+            
+            // Weight
             ConversionItem("oz to g", 28.3495, "weight"),
             ConversionItem("lb to g", 453.592, "weight"),
-            ConversionItem("Stick of Butter to g", 113.0, "weight")
+            ConversionItem("Stick of Butter to g", 113.0, "weight"),
+            ConversionItem("Stick of Butter to Cup", 0.5, "volume")
         )
     }
 
-    val conversions = if (uiState.mode == CalculatorMode.UNIT_CONVERSION) unitConversions else kitchenConversions
+    val currencyConversions = remember {
+        listOf(
+            // USD as base
+            ConversionItem("USD to EUR", 0.95, "currency"),
+            ConversionItem("EUR to USD", 1.05, "currency"),
+            ConversionItem("USD to GBP", 0.79, "currency"),
+            ConversionItem("GBP to USD", 1.27, "currency"),
+            ConversionItem("USD to JPY", 150.0, "currency"),
+            ConversionItem("JPY to USD", 0.0067, "currency"),
+            ConversionItem("USD to CAD", 1.40, "currency"),
+            ConversionItem("CAD to USD", 0.71, "currency"),
+            ConversionItem("USD to AUD", 1.55, "currency"),
+            ConversionItem("AUD to USD", 0.65, "currency")
+        )
+    }
+
+    val conversions = when (uiState.mode) {
+        CalculatorMode.UNIT_CONVERSION -> unitConversions
+        CalculatorMode.KITCHEN_CONVERSION -> kitchenConversions
+        CalculatorMode.CURRENCY_CONVERSION -> currencyConversions
+        else -> emptyList()
+    }
 
     Column(
         modifier = modifier
