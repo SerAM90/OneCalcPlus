@@ -12,6 +12,7 @@ sealed class CalculatorUiEvent {
     object Clear : CalculatorUiEvent()
     data class SetMode(val mode: CalculatorMode) : CalculatorUiEvent()
     object ToggleScientific : CalculatorUiEvent()
-    data class SelectConversion(val item: ConversionItem) : CalculatorUiEvent()
+    data class SelectConversion(val item: ConversionItem?) : CalculatorUiEvent()
     object BackToConversionList : CalculatorUiEvent()
+    data class UpdateCustomCurrency(val from: String? = null, val to: String? = null) : CalculatorUiEvent()
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,10 +46,13 @@ fun ConversionLayout(
     val conversionInput = uiState.conversionInput
 
     // Optimization: Calculate result only when inputs change
-    val conversionResult = remember(conversionInput, selectedConversion) {
-        if (selectedConversion != null) {
-            viewModel.getConversionResult(conversionInput, selectedConversion)
-        } else ""
+    val conversionResult = remember(conversionInput, selectedConversion, uiState.customFromCurrency, uiState.customToCurrency) {
+        viewModel.getConversionResult(
+            conversionInput, 
+            selectedConversion,
+            uiState.customFromCurrency,
+            uiState.customToCurrency
+        )
     }
 
     val unitConversions = remember {
@@ -71,9 +75,6 @@ fun ConversionLayout(
             ConversionItem("gal to L", 3.78541, "volume"),
             ConversionItem("ml to fl oz", 0.033814, "volume"),
             
-            // Temperature (Note: Linear factor is a placeholder for non-offset temps like Kelvin, 
-            // but for C/F we use the ViewModel's special handling if implemented. 
-            // Currently using factor as a rough approximation for scale.)
             ConversionItem("Celsius to F", 1.8, "temperature")
         )
     }
@@ -132,31 +133,59 @@ fun ConversionLayout(
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        if (selectedConversion != null) {
+        if (selectedConversion != null || (uiState.mode == CalculatorMode.CURRENCY_CONVERSION && conversionInput != "0")) {
             // Interactive Conversion UI
+            val fromText = if (selectedConversion != null) {
+                if (selectedConversion.fromSymbol.isNotEmpty()) {
+                    "$conversionInput ${selectedConversion.fromSymbol}"
+                } else conversionInput
+            } else {
+                "$conversionInput ${getCurrencySymbol(uiState.customFromCurrency)}"
+            }
+            
+            val toText = if (selectedConversion != null) {
+                if (selectedConversion.toSymbol.isNotEmpty()) {
+                    "$conversionResult ${selectedConversion.toSymbol}"
+                } else conversionResult
+            } else {
+                "$conversionResult ${getCurrencySymbol(uiState.customToCurrency)}"
+            }
+
             Card(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = selectedConversion.label, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.tertiary)
+                    val label = selectedConversion?.label ?: "${uiState.customFromCurrency} to ${uiState.customToCurrency}"
+                    Text(text = label, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.tertiary)
                     Spacer(modifier = Modifier.height(16.dp))
                     
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        val fromText = if (selectedConversion.fromSymbol.isNotEmpty()) {
-                            "$conversionInput ${selectedConversion.fromSymbol}"
-                        } else conversionInput
-                        
-                        val toText = if (selectedConversion.toSymbol.isNotEmpty()) {
-                            "$conversionResult ${selectedConversion.toSymbol}"
-                        } else conversionResult
-
                         Text(text = fromText, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(text = "=", fontSize = 24.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(text = toText, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                     }
+                }
+            }
+
+            if (selectedConversion == null && uiState.mode == CalculatorMode.CURRENCY_CONVERSION) {
+                // Dropdown selections for Custom Currency
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    CurrencyDropdown(
+                        selected = uiState.customFromCurrency,
+                        onSelect = { viewModel.onEvent(CalculatorUiEvent.UpdateCustomCurrency(from = it)) },
+                        modifier = Modifier.weight(1f)
+                    )
+                    CurrencyDropdown(
+                        selected = uiState.customToCurrency,
+                        onSelect = { viewModel.onEvent(CalculatorUiEvent.UpdateCustomCurrency(to = it)) },
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
 
@@ -228,14 +257,30 @@ fun ConversionLayout(
                         }
                     }
                 }
+                
+                if (uiState.mode == CalculatorMode.CURRENCY_CONVERSION) {
+                    item(span = { GridItemSpan(2) }) {
+                        Button(
+                            onClick = { viewModel.onEvent(CalculatorUiEvent.NumberClick("1")) }, // Trigger interactive mode with initial "1"
+                            modifier = Modifier.fillMaxWidth().height(60.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                        ) {
+                            Text(
+                                stringResource(R.string.custom_currency_conversion),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
+                    }
+                }
             }
         }
         
         CalcButton(
-            text = if (selectedConversion != null) stringResource(R.string.back_to_list) else stringResource(R.string.back_to_calculator),
+            text = if (selectedConversion != null || (uiState.mode == CalculatorMode.CURRENCY_CONVERSION && conversionInput != "0")) stringResource(R.string.back_to_list) else stringResource(R.string.back_to_calculator),
             modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
             onClick = { 
-                if (selectedConversion != null) {
+                if (selectedConversion != null || (uiState.mode == CalculatorMode.CURRENCY_CONVERSION && conversionInput != "0")) {
                     viewModel.onEvent(CalculatorUiEvent.BackToConversionList)
                 } else {
                     viewModel.onEvent(CalculatorUiEvent.SetMode(CalculatorMode.CALCULATOR))
@@ -244,6 +289,53 @@ fun ConversionLayout(
             backgroundColor = MaterialTheme.colorScheme.tertiary,
             contentColor = MaterialTheme.colorScheme.onTertiary
         )
+    }
+}
+
+@Composable
+fun CurrencyDropdown(
+    selected: String,
+    onSelect: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val currencies = listOf("USD", "EUR", "GBP", "JPY", "CAD", "AUD")
+
+    Box(modifier = modifier) {
+        OutlinedButton(
+            onClick = { expanded = true },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)
+        ) {
+            Text(text = selected)
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant)
+        ) {
+            currencies.forEach { currency ->
+                DropdownMenuItem(
+                    text = { Text(currency) },
+                    onClick = {
+                        onSelect(currency)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+private fun getCurrencySymbol(code: String): String {
+    return when (code) {
+        "USD" -> "$"
+        "EUR" -> "€"
+        "GBP" -> "£"
+        "JPY" -> "¥"
+        "CAD" -> "C$"
+        "AUD" -> "A$"
+        else -> code
     }
 }
 

@@ -38,6 +38,7 @@ class CalculatorViewModel : ViewModel() {
             CalculatorUiEvent.ToggleScientific -> toggleScientific()
             is CalculatorUiEvent.SelectConversion -> selectConversion(event.item)
             CalculatorUiEvent.BackToConversionList -> backToConversionList()
+            is CalculatorUiEvent.UpdateCustomCurrency -> updateCustomCurrency(event.from, event.to)
         }
     }
 
@@ -205,8 +206,19 @@ class CalculatorViewModel : ViewModel() {
         _uiState.update { it.copy(isScientificExpanded = !it.isScientificExpanded) }
     }
 
-    private fun selectConversion(item: ConversionItem) {
+    private fun selectConversion(item: ConversionItem?) {
         _uiState.update { it.copy(selectedConversion = item, conversionInput = "1") }
+        isNewConversionInput = true
+    }
+
+    private fun updateCustomCurrency(from: String?, to: String?) {
+        _uiState.update { state ->
+            state.copy(
+                customFromCurrency = from ?: state.customFromCurrency,
+                customToCurrency = to ?: state.customToCurrency,
+                conversionInput = "1"
+            )
+        }
         isNewConversionInput = true
     }
 
@@ -215,13 +227,26 @@ class CalculatorViewModel : ViewModel() {
         isNewConversionInput = true
     }
 
-    fun getConversionResult(input: String, item: ConversionItem): String {
+    fun getConversionResult(input: String, item: ConversionItem?, customFrom: String = "", customTo: String = ""): String {
         val valDouble = try {
             input.toDouble()
         } catch (e: Exception) {
             0.0
         }
         
+        if (item == null) {
+            // Custom Currency Logic
+            val rates = mapOf(
+                "USD" to 1.0, "EUR" to 0.95, "GBP" to 0.79, 
+                "JPY" to 150.0, "CAD" to 1.40, "AUD" to 1.55
+            )
+            val fromRate = rates[customFrom] ?: 1.0
+            val toRate = rates[customTo] ?: 1.0
+            // Convert to USD base then to target
+            val result = (valDouble / fromRate) * toRate
+            return formatResult(result)
+        }
+
         return if (item.label == "Celsius to F") {
             formatResult((valDouble * 1.8) + 32)
         } else {

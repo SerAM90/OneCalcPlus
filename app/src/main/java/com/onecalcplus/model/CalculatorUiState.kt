@@ -9,5 +9,7 @@ data class CalculatorUiState(
     val mode: CalculatorMode = CalculatorMode.CALCULATOR,
     val isScientificExpanded: Boolean = false,
     val conversionInput: String = "0",
-    val selectedConversion: ConversionItem? = null
+    val selectedConversion: ConversionItem? = null,
+    val customFromCurrency: String = "USD",
+    val customToCurrency: String = "EUR"
 )

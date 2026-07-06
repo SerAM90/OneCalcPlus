@@ -4,6 +4,7 @@
     <string name="unit_conversions">Unit Conversions</string>
     <string name="kitchen_conversions">Kitchen Conversions</string>
     <string name="currency_conversions">Currency Conversions</string>
+    <string name="custom_currency_conversion">Custom Currency Conversion</string>
     <string name="back_to_calculator">Back to Calculator</string>
     <string name="back_to_list">Back to List</string>
     <string name="settings_description">Settings</string>
