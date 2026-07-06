@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus.model
+package com.onecalcplus.model
 
 /**
  * UI State for the Calculator, following MAD standards by grouping related fields.

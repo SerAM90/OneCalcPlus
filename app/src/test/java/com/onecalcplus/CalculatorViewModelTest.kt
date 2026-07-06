@@ -1,8 +1,8 @@
-package com.cs467.onecalcplus
+package com.onecalcplus
 
-import com.cs467.onecalcplus.model.CalculatorMode
-import com.cs467.onecalcplus.model.CalculatorUiEvent
-import com.cs467.onecalcplus.model.ConversionItem
+import com.onecalcplus.model.CalculatorMode
+import com.onecalcplus.model.CalculatorUiEvent
+import com.onecalcplus.model.ConversionItem
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before

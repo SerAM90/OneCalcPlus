@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus.ui.theme
+package com.onecalcplus.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

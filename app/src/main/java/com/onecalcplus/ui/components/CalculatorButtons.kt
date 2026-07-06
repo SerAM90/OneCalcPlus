@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus.ui.components
+package com.onecalcplus.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,9 +20,9 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cs467.onecalcplus.ui.theme.Primary
-import com.cs467.onecalcplus.ui.theme.PrimaryContainer
-import com.cs467.onecalcplus.ui.theme.SurfaceBright
+import com.onecalcplus.ui.theme.Primary
+import com.onecalcplus.ui.theme.PrimaryContainer
+import com.onecalcplus.ui.theme.SurfaceBright
 
 @Composable
 fun CalcButton(

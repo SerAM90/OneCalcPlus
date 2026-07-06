@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus.ui.screens
+package com.onecalcplus.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,13 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cs467.onecalcplus.CalculatorViewModel
-import com.cs467.onecalcplus.R
-import com.cs467.onecalcplus.model.CalculatorMode
-import com.cs467.onecalcplus.model.CalculatorUiEvent
-import com.cs467.onecalcplus.model.ConversionItem
-import com.cs467.onecalcplus.ui.components.CalcButton
-import com.cs467.onecalcplus.ui.theme.OneCalcPlusTheme
+import com.onecalcplus.CalculatorViewModel
+import com.onecalcplus.R
+import com.onecalcplus.model.CalculatorMode
+import com.onecalcplus.model.CalculatorUiEvent
+import com.onecalcplus.model.ConversionItem
+import com.onecalcplus.ui.components.CalcButton
+import com.onecalcplus.ui.theme.OneCalcPlusTheme
 
 @Composable
 fun ConversionLayout(

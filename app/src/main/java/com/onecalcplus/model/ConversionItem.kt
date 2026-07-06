@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus.model
+package com.onecalcplus.model
 
 data class ConversionItem(
     val label: String,

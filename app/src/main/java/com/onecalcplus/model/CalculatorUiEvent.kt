@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus.model
+package com.onecalcplus.model
 
 /**
  * UI Events to handle user interactions via Unidirectional Data Flow.

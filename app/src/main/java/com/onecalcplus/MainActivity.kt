@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus
+package com.onecalcplus
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,8 +8,8 @@ import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.cs467.onecalcplus.ui.screens.CalculatorScreen
-import com.cs467.onecalcplus.ui.theme.OneCalcPlusTheme
+import com.onecalcplus.ui.screens.CalculatorScreen
+import com.onecalcplus.ui.theme.OneCalcPlusTheme
 
 class MainActivity : ComponentActivity() {
     private val viewModel: CalculatorViewModel by viewModels()

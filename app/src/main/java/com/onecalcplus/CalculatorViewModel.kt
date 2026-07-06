@@ -1,10 +1,10 @@
-package com.cs467.onecalcplus
+package com.onecalcplus
 
 import androidx.lifecycle.ViewModel
-import com.cs467.onecalcplus.model.CalculatorMode
-import com.cs467.onecalcplus.model.CalculatorUiEvent
-import com.cs467.onecalcplus.model.CalculatorUiState
-import com.cs467.onecalcplus.model.ConversionItem
+import com.onecalcplus.model.CalculatorMode
+import com.onecalcplus.model.CalculatorUiEvent
+import com.onecalcplus.model.CalculatorUiState
+import com.onecalcplus.model.ConversionItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

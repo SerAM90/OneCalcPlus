@@ -1,4 +1,4 @@
-package com.cs467.onecalcplus.ui.theme
+package com.onecalcplus.ui.theme
 
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme

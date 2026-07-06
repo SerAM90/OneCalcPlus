@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.cs467.onecalcplus"
+    namespace = "com.onecalcplus"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.cs467.onecalcplus"
+        applicationId = "com.onecalcplus"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
