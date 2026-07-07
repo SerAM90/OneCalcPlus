@@ -21,7 +21,22 @@ The project includes a comprehensive suite of unit tests covering:
 - Scientific function accuracy.
 - Conversion logic and reciprocal factors.
 
-Run tests using:
+## 📷 Screenshots
+
+- **Standard Calculator**
+  
+  <img width="381" height="778" alt="Screenshot 2026-07-07 at 4 56 11 PM" src="https://github.com/user-attachments/assets/e49920ca-97a5-4c17-b33d-7f37589ec48d" />
+  
+- **Scientific Calculator**
+  
+ <img width="332" height="740" alt="Screenshot 2026-07-07 at 4 57 56 PM" src="https://github.com/user-attachments/assets/0ebb4dd2-fd4f-4902-96bd-6f167301b048" />
+ 
+- **Multiple Conversion Selections**
+  
+ <img width="337" height="398" alt="Screenshot 2026-07-07 at 4 56 40 PM" src="https://github.com/user-attachments/assets/9c601367-655e-44cb-b0fc-4fcb9c31d658" />
+
+
+## Run tests using:
 ```bash
 ./gradlew test
 ```
